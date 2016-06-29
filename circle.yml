@@ -10,7 +10,7 @@ dependencies:
     - asdf plugin-add erlang https://github.com/HashNuke/asdf-erlang.git
     - asdf plugin-add elixir https://github.com/HashNuke/asdf-elixir.git
     - echo "erlang 18.3" >> .tool-versions
-    - echo "elixir 1.3" >> .tool-versions
+    - echo "elixir 1.3.0" >> .tool-versions
     - erlang_version=$(awk '/erlang/ { print $2 }' .tool-versions) && asdf install erlang ${erlang_version}
     - elixir_version=$(awk '/elixir/ { print $2 }' .tool-versions) && asdf install elixir ${elixir_version}
     - yes | mix deps.get
