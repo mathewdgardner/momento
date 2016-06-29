@@ -18,7 +18,10 @@ defmodule Momento.Add do
 
   # Years
   def add(%DateTime{} = datetime, 0, :years), do: datetime
-  def add(%DateTime{year: year} = datetime, num, :years) when positive?(num), do: %DateTime{datetime | year: year + num}
+
+  def add(%DateTime{year: year} = datetime, num, :years)
+  when positive?(num),
+  do: %DateTime{datetime | year: year + num}
 
 
   # Months
