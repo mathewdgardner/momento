@@ -144,7 +144,7 @@ defmodule AddSpec do
       end
     end
 
-    describe "hours", only: true do
+    describe "hours" do
       before do
         {:shared, datetime: %DateTime{Momento.date | month: 6, day: 15, hour: 12}}
       end
@@ -223,6 +223,155 @@ defmodule AddSpec do
         num = 17520
         datetime = Momento.add(shared.datetime, num, :hours)
 
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year + 2)
+      end
+    end
+
+    describe "minutes" do
+      before do
+        {:shared, datetime: %DateTime{Momento.date | month: 6, day: 15, hour: 12, minute: 15}}
+      end
+
+      it "should add few minutes" do
+        num = 30
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute + num)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and an hour" do
+        num = 55
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq 10)
+        expect(datetime.hour) |> to(eq shared.datetime.hour + 1)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and a day" do
+        num = 1455
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute + 15)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day + 1)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and a month" do
+        num = 43215
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute + 15)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month + 1)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and a year" do
+        num = 525615
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute + 15)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year + 1)
+      end
+
+      it "should add no minutes but add an hour" do
+        num = 60
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute)
+        expect(datetime.hour) |> to(eq shared.datetime.hour + 1)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add no minutes but add a day" do
+        num = 1440
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day + 1)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add no minutes but add a month" do
+        num = 43200
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month + 1)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add no minutes but add a year" do
+        num = 525600
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year + 1)
+      end
+
+      it "should add many minutes and many hours" do
+        num = 170
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq 5)
+        expect(datetime.hour) |> to(eq shared.datetime.hour + 3)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and many days" do
+        num = 3 * 1440 - 10
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq 5)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day + 3)
+        expect(datetime.month) |> to(eq shared.datetime.month)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and many months" do
+        num = 60 * 24 * 30 + 60 * 24 * 31 - 10
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq 5)
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+        expect(datetime.month) |> to(eq shared.datetime.month + 2)
+        expect(datetime.year) |> to(eq shared.datetime.year)
+      end
+
+      it "should add many minutes and many years" do
+        num = 2 * 365 * 24 * 60 - 10
+        datetime = Momento.add(shared.datetime, num, :minutes)
+
+        expect(datetime.minute) |> to(eq 5)
         expect(datetime.hour) |> to(eq shared.datetime.hour)
         expect(datetime.day) |> to(eq shared.datetime.day)
         expect(datetime.month) |> to(eq shared.datetime.month)

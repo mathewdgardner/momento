@@ -49,15 +49,31 @@ defmodule Momento.Add do
   # Hours
   def add(%DateTime{} = datetime, 0, :hours), do: datetime
 
-  def add(%DateTime{hour: hour} = datetime, num, :hours)
+  def add(%DateTime{} = datetime, num, :hours)
   when positive?(num) and num > 24,
   do: add(add(datetime, 1, :days), num - 24, :hours)
 
   def add(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour < 24,
-  do: %{datetime | hour: num + hour}
+  do: %DateTime{datetime | hour: num + hour}
 
-  def add(%DateTime{hour: hour, day: day} = datetime, num, :hours)
+  def add(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour >= 24,
-  do: add(add(%{datetime | hour: 0}, 1, :days), -(24 - hour - num), :hours)
+  do: add(add(%DateTime{datetime | hour: 0}, 1, :days), -(24 - hour - num), :hours)
+
+
+  # Seconds
+  def add(%DateTime{} = datetime, 0, :minutes), do: datetime
+
+  def add(%DateTime{} = datetime, num, :minutes)
+  when positive?(num) and num > 60,
+  do: add(add(datetime, 1, :hours), num - 60, :minutes)
+
+  def add(%DateTime{minute: minute} = datetime, num, :minutes)
+  when positive?(num) and num + minute < 60,
+  do: %DateTime{datetime | minute: num + minute}
+
+  def add(%DateTime{minute: minute} = datetime, num, :minutes)
+  when positive?(num) and num + minute >= 60,
+  do: add(add(%DateTime{datetime | minute: 0}, 1, :hours), -(60 - minute - num), :minutes)
 end
