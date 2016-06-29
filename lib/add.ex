@@ -1,6 +1,11 @@
 defmodule Momento.Add do
   import Momento.Guards
 
+  # Helpers
+  defp floor(float), do: Float.floor(float) |> round
+  defp millisecond_factor(precision), do: :math.pow(10, precision - 3) |> round
+  defp microsecond_factor(precision), do: :math.pow(10, precision) |> round
+
   # Singular to plural
   def add(datetime, num, :year), do: add(datetime, num, :years)
   def add(datetime, num, :month), do: add(datetime, num, :months)
@@ -19,13 +24,16 @@ defmodule Momento.Add do
   # Months
   def add(%DateTime{} = datetime, 0, :months), do: datetime
 
-  def add(%DateTime{year: year} = datetime, num, :months)
-  when positive?(num) and num >= 12,
-  do: add(%DateTime{datetime | year: year + 1}, num - 12, :month)
-
   def add(%DateTime{month: month} = datetime, num, :months)
   when positive?(num) and month + num <= 12,
   do: %DateTime{datetime | month: month + num}
+
+  def add(%DateTime{} = datetime, num, :months)
+  when positive?(num) and num > 11
+  do
+    years = floor(num / 12)
+    add(add(datetime, years, :years), num - years * 12, :months)
+  end
 
   def add(%DateTime{year: year, month: month} = datetime, num, :months)
   when positive?(num) and month + num > 12,
@@ -40,7 +48,7 @@ defmodule Momento.Add do
   do: %DateTime{datetime | day: day + num}
 
   def add(%DateTime{month: month} = datetime, num, :days)
-  when positive?(num) and num >= days_in_month(month),
+  when positive?(num) and num > days_in_month(month),
   do: add(datetime, 1, :months) |> add(num - days_in_month(month), :days)
 
   def add(%DateTime{month: month, day: day} = datetime, num, :days)
@@ -52,8 +60,11 @@ defmodule Momento.Add do
   def add(%DateTime{} = datetime, 0, :hours), do: datetime
 
   def add(%DateTime{} = datetime, num, :hours)
-  when positive?(num) and num > 24,
-  do: add(add(datetime, 1, :days), num - 24, :hours)
+  when positive?(num) and num > 24
+  do
+    days = floor(num / 24)
+    add(add(datetime, days, :days), num - days * 24, :hours)
+  end
 
   def add(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour < 24,
@@ -68,8 +79,11 @@ defmodule Momento.Add do
   def add(%DateTime{} = datetime, 0, :minutes), do: datetime
 
   def add(%DateTime{} = datetime, num, :minutes)
-  when positive?(num) and num > 60,
-  do: add(add(datetime, 1, :hours), num - 60, :minutes)
+  when positive?(num) and num > 60
+  do
+    hours = floor(num / 60)
+    add(add(datetime, hours, :hours), num - hours * 60, :minutes)
+  end
 
   def add(%DateTime{minute: minute} = datetime, num, :minutes)
   when positive?(num) and num + minute < 60,
@@ -84,8 +98,11 @@ defmodule Momento.Add do
   def add(%DateTime{} = datetime, 0, :seconds), do: datetime
 
   def add(%DateTime{} = datetime, num, :seconds)
-  when positive?(num) and num > 60,
-  do: add(add(datetime, 1, :minutes), num - 60, :seconds)
+  when positive?(num) and num > 60
+  do
+    minutes = floor(num / 60)
+    add(add(datetime, minutes, :minutes), num - minutes * 60, :seconds)
+  end
 
   def add(%DateTime{second: second} = datetime, num, :seconds)
   when positive?(num) and num + second < 60,
@@ -114,10 +131,6 @@ defmodule Momento.Add do
   # Microseconds
   def add(%DateTime{} = datetime, 0, :microseconds), do: datetime
 
-  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
-  when positive?(num) and precision === 6 and microsecond + num <= 999999,
-  do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
-
   def add(%DateTime{microsecond: {_, precision}} = datetime, num, :microseconds)
   when positive?(num) and precision === 6 and num > 999999
   do
@@ -125,8 +138,7 @@ defmodule Momento.Add do
     add(add(datetime, seconds, :seconds), num - seconds * microsecond_factor(precision), :microseconds)
   end
 
-
-  # Helpers
-  defp millisecond_factor(precision), do: :math.pow(10, precision - 3) |> round
-  defp microsecond_factor(precision), do: :math.pow(10, precision) |> round
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when positive?(num) and precision === 6 and microsecond + num <= 999999,
+  do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
 end
