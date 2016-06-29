@@ -118,7 +118,7 @@ defmodule Momento.Add do
   when positive?(num) and precision === 6 and microsecond + num <= 999999,
   do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
 
-  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  def add(%DateTime{microsecond: {_, precision}} = datetime, num, :microseconds)
   when positive?(num) and precision === 6 and num > 999999
   do
     seconds = Float.floor(num / microsecond_factor(precision)) |> round

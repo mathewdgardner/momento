@@ -257,7 +257,7 @@ defmodule AddSpec do
       end
     end
 
-    describe "microseconds", only: true do
+    describe "microseconds" do
       before do
         {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
       end
