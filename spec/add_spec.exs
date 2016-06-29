@@ -213,5 +213,92 @@ defmodule AddSpec do
         expect(datetime.minute) |> to(eq shared.datetime.minute + 2)
       end
     end
+
+    describe "milliseconds" do
+      before do
+        {:shared, datetime: %DateTime{Momento.date | second: 15, microsecond: {123456, 6}}}
+      end
+
+      it "should add nothing" do
+        milliseconds = 0
+        datetime = Momento.add(shared.datetime, milliseconds, :milliseconds)
+
+        expect(datetime) |> to(eq shared.datetime)
+      end
+
+      it "should add milliseconds without rollover" do
+        milliseconds = 100
+        datetime = Momento.add(shared.datetime, milliseconds, :milliseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond + milliseconds * 1000)
+        expect(newPrecision) |> to(eq oldPrecision)
+        expect(datetime.second) |> to(eq shared.datetime.second)
+      end
+
+      it "should add milliseconds and rollover seconds" do
+        milliseconds = 2111
+        datetime = Momento.add(shared.datetime, milliseconds, :milliseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond + 111000)
+        expect(newPrecision) |> to(eq oldPrecision)
+        expect(datetime.second) |> to(eq shared.datetime.second + 2)
+      end
+
+      it "should only add seconds" do
+        milliseconds = 2000
+        datetime = Momento.add(shared.datetime, milliseconds, :milliseconds)
+
+        expect(datetime.microsecond) |> to(eq shared.datetime.microsecond)
+        expect(datetime.second) |> to(eq shared.datetime.second + 2)
+      end
+    end
+
+    describe "microseconds", only: true do
+      before do
+        {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+      end
+
+      it "should add nothing" do
+        microseconds = 0
+        datetime = Momento.add(shared.datetime, microseconds, :microseconds)
+
+        expect(datetime) |> to(eq shared.datetime)
+      end
+
+      it "should add microseconds without rollover" do
+        microseconds = 111
+        datetime = Momento.add(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond + microseconds)
+        expect(newPrecision) |> to(eq oldPrecision)
+      end
+
+      it "should add microseconds and rollover seconds" do
+        microseconds = 2111111
+        datetime = Momento.add(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond + 111111)
+        expect(newPrecision) |> to(eq oldPrecision)
+      end
+
+      it "should only add seconds" do
+        microseconds = 2000000
+        datetime = Momento.add(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond)
+        expect(newPrecision) |> to(eq oldPrecision)
+        expect(datetime.second) |> to(eq shared.datetime.second + 2)
+      end
+    end
   end
 end

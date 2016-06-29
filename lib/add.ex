@@ -8,6 +8,8 @@ defmodule Momento.Add do
   def add(datetime, num, :hour), do: add(datetime, num, :hours)
   def add(datetime, num, :minute), do: add(datetime, num, :minutes)
   def add(datetime, num, :second), do: add(datetime, num, :seconds)
+  def add(datetime, num, :millisecond), do: add(datetime, num, :milliseconds)
+  def add(datetime, num, :microsecond), do: add(datetime, num, :microseconds)
 
   # Years
   def add(%DateTime{} = datetime, 0, :years), do: datetime
@@ -92,4 +94,39 @@ defmodule Momento.Add do
   def add(%DateTime{second: second} = datetime, num, :seconds)
   when positive?(num) and num + second >= 60,
   do: add(add(%DateTime{datetime | second: 0}, 1, :minutes), -(60 - second - num), :seconds)
+
+
+  # Milliseconds
+  def add(%DateTime{} = datetime, 0, :milliseconds), do: datetime
+
+  def add(%DateTime{microsecond: {_, precision}} = datetime, num, :milliseconds)
+  when positive?(num) and num > 999 and precision >= 3
+  do
+    seconds = Float.floor(num / millisecond_factor(precision)) |> round
+    add(add(datetime, seconds, :seconds), num - seconds * millisecond_factor(precision), :milliseconds)
+  end
+
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :milliseconds)
+  when positive?(num) and num <= 999,
+  do: %DateTime{datetime | microsecond: {microsecond + num * millisecond_factor(precision), precision}}
+
+
+  # Microseconds
+  def add(%DateTime{} = datetime, 0, :microseconds), do: datetime
+
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when positive?(num) and precision === 6 and microsecond + num <= 999999,
+  do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
+
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when positive?(num) and precision === 6 and num > 999999
+  do
+    seconds = Float.floor(num / microsecond_factor(precision)) |> round
+    add(add(datetime, seconds, :seconds), num - seconds * microsecond_factor(precision), :microseconds)
+  end
+
+
+  # Helpers
+  defp millisecond_factor(precision), do: :math.pow(10, precision - 3) |> round
+  defp microsecond_factor(precision), do: :math.pow(10, precision) |> round
 end
