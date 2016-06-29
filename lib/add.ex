@@ -43,47 +43,21 @@ defmodule Momento.Add do
 
   def add(%DateTime{month: month, day: day} = datetime, num, :days)
   when positive?(num) and day + num > days_in_month(month),
-  do: add(add(%DateTime{datetime | day: 1}, 1, :months), -1 * (days_in_month(month) - day - num + 1), :days)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  do: add(add(%DateTime{datetime | day: 1}, 1, :months), -(days_in_month(month) - day - num + 1), :days)
 
 
   # Hours
-  def add(%DateTime{} = datetime, 0, :hour), do: datetime
-  def add(%DateTime{} = datetime, 0, :hours), do: add(datetime, 0, :hour)
+  def add(%DateTime{} = datetime, 0, :hours), do: datetime
 
-  def add(%DateTime{hour: hour} = datetime, num, :hour)
+  def add(%DateTime{hour: hour} = datetime, num, :hours)
+  when positive?(num) and num > 24,
+  do: add(add(datetime, 1, :days), num - 24, :hours)
+
+  def add(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour < 24,
   do: %{datetime | hour: num + hour}
 
-  # def add(%DateTime{} = datetime, num, :hours)
-  # when positive?(num) and num + hour < 24,
-  # do: add(datetime, num, :hour)
-
-  def add(%DateTime{hour: hour, day: day} = datetime, num, :hour)
+  def add(%DateTime{hour: hour, day: day} = datetime, num, :hours)
   when positive?(num) and num + hour >= 24,
-  do: add(%{datetime | day: day + 1}, num - 24, :hour)
-
-  # def add(%DateTime{} = datetime, num, :hours)
-  # when positive?(num) and num + hour >= 24,
-  # do: add(datetime, num, :hour)
-
+  do: add(add(%{datetime | hour: 0}, 1, :days), -(24 - hour - num), :hours)
 end
