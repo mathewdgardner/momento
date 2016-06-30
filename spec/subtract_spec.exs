@@ -239,7 +239,7 @@ defmodule SubtractSpec do
       it "should subtract microseconds and rollover seconds" do
         microseconds = 123458
         datetime = Momento.subtract(shared.datetime, microseconds, :microseconds)
-        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {_, oldPrecision} = shared.datetime.microsecond
         {newMicrosecond, newPrecision} = datetime.microsecond
 
         expect(newMicrosecond) |> to(eq 999998)
