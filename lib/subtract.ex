@@ -100,4 +100,25 @@ defmodule Momento.Subtract do
   def subtract(%DateTime{minute: minute} = datetime, num, :minutes)
   when positive?(num) and negative?(minute - num),
   do: subtract(%DateTime{datetime | minute: 59}, 1, :hours) |> subtract(num - minute - 1, :minutes)
+
+
+  # Seconds
+
+  # Base case
+  def subtract(%DateTime{second: second} = datetime, num, :seconds)
+  when natural?(num) and natural?(second - num),
+  do: %DateTime{datetime | second: second - num}
+
+  # Many minutes worth of seconds
+  def subtract(%DateTime{} = datetime, num, :seconds)
+  when positive?(num) and num > 60
+  do
+    minutes = floor(num / 60)
+    subtract(datetime, minutes, :minutes) |> subtract(num - minutes * 60, :seconds)
+  end
+
+  # Rollover seconds to be the previous minute
+  def subtract(%DateTime{second: second} = datetime, num, :seconds)
+  when positive?(num) and negative?(second - num),
+  do: subtract(%DateTime{datetime | second: 59}, 1, :minutes) |> subtract(num - second - 1, :seconds)
 end
