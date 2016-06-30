@@ -14,16 +14,21 @@ defmodule Momento.Subtract do
 
 
   # Years
+
+  # Base case
   def subtract(%DateTime{year: year} = datetime, num, :years)
   when natural?(num),
   do: %DateTime{datetime | year: year - num}
 
 
   # Months
+
+  # Base case
   def subtract(%DateTime{month: month} = datetime, num, :months)
   when natural?(num) and natural?(month - num),
   do: %DateTime{datetime | month: month - num}
 
+  # Many years worth of months
   def subtract(%DateTime{} = datetime, num, :months)
   when positive?(num) and num > 11
   do
@@ -31,20 +36,25 @@ defmodule Momento.Subtract do
     subtract(datetime, years, :years) |> subtract(num - years * 12, :months)
   end
 
+  # Rollover months to the prevous year
   def subtract(%DateTime{year: year, month: month} = datetime, num, :months)
   when positive?(num) and month - num <= 0,
   do: %DateTime{datetime | month: 12 + month - num, year: year - 1}
 
 
   # Days
+
+  # Base case
   def subtract(%DateTime{day: day} = datetime, num, :days)
   when natural?(num) and natural?(day - num),
   do: %DateTime{datetime | day: day - num}
 
+  # Many months worth of days
   def subtract(%DateTime{month: month} = datetime, num, :days)
   when positive?(num) and num > days_in_month(month - 1),
   do: subtract(datetime, 1, :months) |> subtract(num - days_in_month(month - 1), :days)
 
+  # Rollover days to the previous month
   def subtract(%DateTime{month: month, day: day} = datetime, num, :days)
   when positive?(num) and day + num >= days_in_month(month - 1),
   do: subtract(%DateTime{datetime | day: days_in_month(month - 1)}, 1, :months) |> subtract(num - day, :days)
