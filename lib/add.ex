@@ -13,18 +13,14 @@ defmodule Momento.Add do
   def add(datetime, num, :microsecond), do: add(datetime, num, :microseconds)
 
   # Years
-  def add(%DateTime{} = datetime, 0, :years), do: datetime
-
   def add(%DateTime{year: year} = datetime, num, :years)
-  when positive?(num),
+  when natural?(num),
   do: %DateTime{datetime | year: year + num}
 
 
   # Months
-  def add(%DateTime{} = datetime, 0, :months), do: datetime
-
   def add(%DateTime{month: month} = datetime, num, :months)
-  when positive?(num) and month + num <= 12,
+  when natural?(num) and month + num <= 12,
   do: %DateTime{datetime | month: month + num}
 
   def add(%DateTime{} = datetime, num, :months)
@@ -40,10 +36,8 @@ defmodule Momento.Add do
 
 
   # Days
-  def add(%DateTime{} = datetime, 0, :days), do: datetime
-
   def add(%DateTime{month: month, day: day} = datetime, num, :days)
-  when positive?(num) and day + num <= days_in_month(month),
+  when natural?(num) and day + num <= days_in_month(month),
   do: %DateTime{datetime | day: day + num}
 
   def add(%DateTime{month: month} = datetime, num, :days)
@@ -56,7 +50,9 @@ defmodule Momento.Add do
 
 
   # Hours
-  def add(%DateTime{} = datetime, 0, :hours), do: datetime
+  def add(%DateTime{hour: hour} = datetime, num, :hours)
+  when natural?(num) and num + hour < 24,
+  do: %DateTime{datetime | hour: num + hour}
 
   def add(%DateTime{} = datetime, num, :hours)
   when positive?(num) and num > 24
@@ -66,16 +62,14 @@ defmodule Momento.Add do
   end
 
   def add(%DateTime{hour: hour} = datetime, num, :hours)
-  when positive?(num) and num + hour < 24,
-  do: %DateTime{datetime | hour: num + hour}
-
-  def add(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour >= 24,
   do: add(%DateTime{datetime | hour: 0}, 1, :days) |> add(-(24 - hour - num), :hours)
 
 
   # Minutes
-  def add(%DateTime{} = datetime, 0, :minutes), do: datetime
+  def add(%DateTime{minute: minute} = datetime, num, :minutes)
+  when natural?(num) and num + minute < 60,
+  do: %DateTime{datetime | minute: num + minute}
 
   def add(%DateTime{} = datetime, num, :minutes)
   when positive?(num) and num > 60
@@ -85,16 +79,14 @@ defmodule Momento.Add do
   end
 
   def add(%DateTime{minute: minute} = datetime, num, :minutes)
-  when positive?(num) and num + minute < 60,
-  do: %DateTime{datetime | minute: num + minute}
-
-  def add(%DateTime{minute: minute} = datetime, num, :minutes)
   when positive?(num) and num + minute >= 60,
   do: add(%DateTime{datetime | minute: 0}, 1, :hours) |> add(-(60 - minute - num), :minutes)
 
 
   # Seconds
-  def add(%DateTime{} = datetime, 0, :seconds), do: datetime
+  def add(%DateTime{second: second} = datetime, num, :seconds)
+  when natural?(num) and num + second < 60,
+  do: %DateTime{datetime | second: num + second}
 
   def add(%DateTime{} = datetime, num, :seconds)
   when positive?(num) and num > 60
@@ -104,16 +96,14 @@ defmodule Momento.Add do
   end
 
   def add(%DateTime{second: second} = datetime, num, :seconds)
-  when positive?(num) and num + second < 60,
-  do: %DateTime{datetime | second: num + second}
-
-  def add(%DateTime{second: second} = datetime, num, :seconds)
   when positive?(num) and num + second >= 60,
   do: add(%DateTime{datetime | second: 0}, 1, :minutes) |> add(-(60 - second - num), :seconds)
 
 
   # Milliseconds
-  def add(%DateTime{} = datetime, 0, :milliseconds), do: datetime
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :milliseconds)
+  when natural?(num) and num <= 999,
+  do: %DateTime{datetime | microsecond: {microsecond + num * millisecond_factor(precision), precision}}
 
   def add(%DateTime{microsecond: {_, precision}} = datetime, num, :milliseconds)
   when positive?(num) and num > 999 and precision >= 3
@@ -122,13 +112,11 @@ defmodule Momento.Add do
     add(datetime, seconds, :seconds) |> add(num - seconds * millisecond_factor(precision), :milliseconds)
   end
 
-  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :milliseconds)
-  when positive?(num) and num <= 999,
-  do: %DateTime{datetime | microsecond: {microsecond + num * millisecond_factor(precision), precision}}
-
 
   # Microseconds
-  def add(%DateTime{} = datetime, 0, :microseconds), do: datetime
+  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when natural?(num) and precision === 6 and microsecond + num <= 999999,
+  do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
 
   def add(%DateTime{microsecond: {_, precision}} = datetime, num, :microseconds)
   when positive?(num) and precision === 6 and num > 999999
@@ -136,8 +124,4 @@ defmodule Momento.Add do
     seconds = Float.floor(num / microsecond_factor(precision)) |> round
     add(datetime, seconds, :seconds) |> add(num - seconds * microsecond_factor(precision), :microseconds)
   end
-
-  def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
-  when positive?(num) and precision === 6 and microsecond + num <= 999999,
-  do: %DateTime{datetime | microsecond: {microsecond + num, precision}}
 end

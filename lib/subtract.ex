@@ -14,18 +14,14 @@ defmodule Momento.Subtract do
 
 
   # Years
-  def subtract(%DateTime{} = datetime, 0, :years), do: datetime
-
   def subtract(%DateTime{year: year} = datetime, num, :years)
-  when positive?(num),
+  when natural?(num),
   do: %DateTime{datetime | year: year - num}
 
 
   # Months
-  def subtract(%DateTime{} = datetime, 0, :months), do: datetime
-
   def subtract(%DateTime{month: month} = datetime, num, :months)
-  when positive?(num) and positive?(month - num),
+  when natural?(num) and natural?(month - num),
   do: %DateTime{datetime | month: month - num}
 
   def subtract(%DateTime{} = datetime, num, :months)
@@ -41,8 +37,6 @@ defmodule Momento.Subtract do
 
 
   # Days
-
-  # Base case
   def subtract(%DateTime{day: day} = datetime, num, :days)
   when natural?(num) and natural?(day - num),
   do: %DateTime{datetime | day: day - num}
