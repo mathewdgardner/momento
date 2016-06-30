@@ -213,5 +213,50 @@ defmodule SubtractSpec do
         expect(datetime.minute) |> to(eq shared.datetime.minute - 2)
       end
     end
+
+    describe "microseconds" do
+      before do
+        {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+      end
+
+      it "should subtract nothing" do
+        microseconds = 0
+        datetime = Momento.subtract(shared.datetime, microseconds, :microseconds)
+
+        expect(datetime) |> to(eq shared.datetime)
+      end
+
+      it "should subtract microseconds without rollover" do
+        microseconds = 111
+        datetime = Momento.subtract(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond - microseconds)
+        expect(newPrecision) |> to(eq oldPrecision)
+      end
+
+      it "should subtract microseconds and rollover seconds" do
+        microseconds = 123458
+        datetime = Momento.subtract(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq 999998)
+        expect(newPrecision) |> to(eq oldPrecision)
+        expect(datetime.second) |> to(eq shared.datetime.second - 1)
+      end
+
+      it "should only subtract seconds" do
+        microseconds = 2000000
+        datetime = Momento.subtract(shared.datetime, microseconds, :microseconds)
+        {oldMicrosecond, oldPrecision} = shared.datetime.microsecond
+        {newMicrosecond, newPrecision} = datetime.microsecond
+
+        expect(newMicrosecond) |> to(eq oldMicrosecond)
+        expect(newPrecision) |> to(eq oldPrecision)
+        expect(datetime.second) |> to(eq shared.datetime.second - 2)
+      end
+    end
   end
 end

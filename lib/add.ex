@@ -123,6 +123,7 @@ defmodule Momento.Add do
 
 
   # Milliseconds
+  # TODO: This doesn't seem right and is incomplete
 
   # Base case
   def add(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :milliseconds)

@@ -121,4 +121,29 @@ defmodule Momento.Subtract do
   def subtract(%DateTime{second: second} = datetime, num, :seconds)
   when positive?(num) and negative?(second - num),
   do: subtract(%DateTime{datetime | second: 59}, 1, :minutes) |> subtract(num - second - 1, :seconds)
+
+
+  # TODO: Milliseconds
+
+
+  # Microseconds
+
+  # Base case
+  def subtract(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when natural?(num) and precision === 6 and natural?(microsecond - num),
+  do: %DateTime{datetime | microsecond: {microsecond - num, precision}}
+
+  # Many seconds worth of microseconds
+  def subtract(%DateTime{microsecond: {_, precision}} = datetime, num, :microseconds)
+  when positive?(num) and precision === 6 and num > 999999
+  do
+    seconds = Float.floor(num / microsecond_factor(precision)) |> round
+    subtract(datetime, seconds, :seconds) |> subtract(num - seconds * microsecond_factor(precision), :microseconds)
+  end
+
+  # Rollover microseconds to the previous seconds
+  def subtract(%DateTime{microsecond: {microsecond, precision}} = datetime, num, :microseconds)
+  when natural?(num) and precision === 6 and negative?(microsecond - num),
+  do: subtract(%DateTime{datetime | microsecond: {999999, precision}}, 1, :seconds)
+    |> subtract(num - microsecond - 1, :microseconds)
 end
