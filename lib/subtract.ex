@@ -75,8 +75,29 @@ defmodule Momento.Subtract do
     subtract(datetime, days, :days) |> subtract(num - days * 24, :hours)
   end
 
-  # Rollover hours to be the next day
+  # Rollover hours to be the previous day
   def subtract(%DateTime{hour: hour} = datetime, num, :hours)
   when positive?(num) and num + hour >= 24,
   do: subtract(%DateTime{datetime | hour: 23}, 1, :days) |> subtract(num - hour - 1, :hours)
+
+
+  # Minutes
+
+  # Base case
+  def subtract(%DateTime{minute: minute} = datetime, num, :minutes)
+  when natural?(num) and natural?(minute - num),
+  do: %DateTime{datetime | minute: minute - num}
+
+  # Many hours worth of minutes
+  def subtract(%DateTime{} = datetime, num, :minutes)
+  when positive?(num) and num > 60
+  do
+    hours = floor(num / 60)
+    subtract(datetime, hours, :hours) |> subtract(num - hours * 60, :minutes)
+  end
+
+  # Rollover minutes to be the previous hour
+  def subtract(%DateTime{minute: minute} = datetime, num, :minutes)
+  when positive?(num) and negative?(minute - num),
+  do: subtract(%DateTime{datetime | minute: 59}, 1, :hours) |> subtract(num - minute - 1, :minutes)
 end
