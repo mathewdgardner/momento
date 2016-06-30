@@ -1,10 +1,6 @@
 defmodule Momento.Add do
   import Momento.Guards
-
-  # Helpers
-  defp floor(float), do: Float.floor(float) |> round
-  defp millisecond_factor(precision), do: :math.pow(10, precision - 3) |> round
-  defp microsecond_factor(precision), do: :math.pow(10, precision) |> round
+  import Momento.Helpers
 
   # Singular to plural
   def add(datetime, num, :year), do: add(datetime, num, :years)

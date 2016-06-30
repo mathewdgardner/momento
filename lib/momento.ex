@@ -9,4 +9,7 @@ defmodule Momento do
 
   # add/3
   def add(datetime, num, time), do: Momento.Add.add(datetime, num, time)
+
+  # subtract/3
+  def subtract(datetime, num, time), do: Momento.Subtract.subtract(datetime, num, time)
 end
