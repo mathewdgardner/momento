@@ -102,5 +102,42 @@ defmodule SubtractSpec do
         expect(datetime.month) |> to(eq shared.datetime.month - 3)
       end
     end
+
+    describe "hours" do
+      before do
+        {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 12}}
+      end
+
+      it "should subtract nothing" do
+        hours = 0
+        datetime = Momento.subtract(shared.datetime, hours, :hours)
+
+        expect(datetime) |> to(eq shared.datetime)
+      end
+
+      it "should subtract hours without rollover" do
+        hours = 5
+        datetime = Momento.subtract(shared.datetime, hours, :hours)
+
+        expect(datetime.hour) |> to(eq shared.datetime.hour - hours)
+        expect(datetime.day) |> to(eq shared.datetime.day)
+      end
+
+      it "should subtract hours and rollover days" do
+        hours = 52
+        datetime = Momento.subtract(shared.datetime, hours, :hours)
+
+        expect(datetime.hour) |> to(eq shared.datetime.hour - 4)
+        expect(datetime.day) |> to(eq shared.datetime.day - 2)
+      end
+
+      it "should only subtract days" do
+        hours = 48
+        datetime = Momento.subtract(shared.datetime, hours, :hours)
+
+        expect(datetime.hour) |> to(eq shared.datetime.hour)
+        expect(datetime.day) |> to(eq shared.datetime.day - 2)
+      end
+    end
   end
 end
