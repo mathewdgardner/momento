@@ -36,7 +36,7 @@ defmodule Momento.Add do
   end
 
   # Rollover months to the next year
-  def add(%DateTime{year: year, month: month} = datetime, num, :months)
+  def add(%DateTime{month: month} = datetime, num, :months)
   when positive?(num) and month + num > 12,
   do: add(%DateTime{datetime | month: 1}, 1, :years) |> add(num - month - 1, :months)
 
