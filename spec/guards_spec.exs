@@ -3,7 +3,7 @@ defmodule GuardsSpec do
   import Momento.Guards
   use ESpec
 
-  describe "Custom guards", only: true do
+  describe "Custom guards" do
     describe "natural?" do
       it "should be true if positive integer" do
         expect natural?(5) |> to(be_true)
