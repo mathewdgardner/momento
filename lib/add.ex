@@ -2,6 +2,8 @@ defmodule Momento.Add do
   import Momento.Guards
   import Momento.Helpers
 
+  @spec add(DateTime.t, integer, atom) :: DateTime.t
+
   # Singular to plural
   def add(datetime, num, :year), do: add(datetime, num, :years)
   def add(datetime, num, :month), do: add(datetime, num, :months)

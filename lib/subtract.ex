@@ -2,6 +2,8 @@ defmodule Momento.Subtract do
   import Momento.Guards
   import Momento.Helpers
 
+  @spec subtract(DateTime.t, integer, atom) :: DateTime.t
+
   # Singular to plural
   def subtract(datetime, num, :year), do: subtract(datetime, num, :years)
   def subtract(datetime, num, :month), do: subtract(datetime, num, :months)

@@ -1,11 +1,12 @@
 defmodule Momento.Date do
-  # date/0
+  @spec date() :: DateTime.t
   def date, do: DateTime.from_unix!(:erlang.system_time(:nano_seconds), :nanoseconds)
 
-  # date/1
+  @spec date(DateTime.t) :: DateTime.t
   def date(%DateTime{} = arg), do: arg
 
   # TODO: Add timezone support
+  @spec date(String.t) :: DateTime.t
   def date(arg) when is_bitstring(arg) do
     cond do
       # ISO8601 - "2016-04-20T15:05:13.991Z"
@@ -55,11 +56,12 @@ defmodule Momento.Date do
   end
 
   # Unix epoch
+  @spec date(integer) :: {:ok, DateTime.t}
   def date(s) when is_integer(s) and s > 999999999999999999, do: DateTime.from_unix(s, :nanoseconds)
   def date(s) when is_integer(s) and s > 999999999999999, do: DateTime.from_unix(s, :microseconds)
   def date(s) when is_integer(s) and s > 999999999999, do: DateTime.from_unix(s, :milliseconds)
   def date(s) when is_integer(s) and s > 999999999, do: DateTime.from_unix(s, :seconds)
 
-  # date!/1
+  @spec date(integer) :: DateTime.t
   def date!(s), do: ({:ok, datetime} = date(s); datetime)
 end
