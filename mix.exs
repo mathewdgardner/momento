@@ -4,6 +4,7 @@ defmodule Momento.Mixfile do
   def project do
     [app: :momento,
      version: "0.1.0",
+     description: "Momento is an Elixir port of Moment.js for the purpose of parsing, validating, manipulating, and formatting dates.",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
