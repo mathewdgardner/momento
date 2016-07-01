@@ -65,6 +65,10 @@ Things that need to be added for this library to be most useful:
   4. Localization
   5. Other useful [Moment.js](https://github.com/moment/moment) things
 
+### Contributing
+
+Making a date time library is a tall order. I need help if we are going to make this work. I started this project in an effort to learn Elixir so I'm sure there are many improvements in the existing codebase that can be made. There are probably bugs and generally bad Elixir patterns. I also place `TODO:`s everywhere so feel free to tackle them or any Enhancement/Bug issues.
+
 ### License
 
 This software is licensed under [the MIT license](LICENSE.md).
