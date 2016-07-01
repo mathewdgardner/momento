@@ -30,4 +30,22 @@ defmodule Momento.Mixfile do
   defp deps do
     [{:espec, "~> 0.8", only: :test}]
   end
+
+  defp description do
+    """
+    Momento is an Elixir port of Moment.js for the purpose of parsing, validating, manipulating, and formatting dates.
+    """
+  end
+
+  defp package do
+    [
+      name: :momento,
+      files: ["lib", "mix.exs", "README.md", "LICENSE",],
+      maintainers: ["Mathew Gardner <mathewdgardner@gmail.com>"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/mathewdgardner/momento"
+      }
+    ]
+  end
 end
