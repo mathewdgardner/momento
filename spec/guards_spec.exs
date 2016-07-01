@@ -59,9 +59,11 @@ defmodule GuardsSpec do
         expect days_in_month(0) |> to(eq 31)
       end
 
-      it "should not accept integers out of range" do
-        expect fn -> days_in_month(14) end |> to(raise_exception ArgumentError, "argument error")
+      it "should accept integers out of range" do
+        expect days_in_month(14) |> to(eq 28)
       end
+
+      it "should accept negative integers and index from the end"
     end
   end
 end
