@@ -32,7 +32,10 @@ defmodule FormatSpec do
       end
 
       it "should replace the Mo token with month of year ordinal"
-      it "should replace the M token with month of year without zero padding"
+
+      it "should replace the M token with month of year without zero padding" do
+        shared.datetime |> Momento.format("M") |> expect |> to(eql "5")
+      end
     end
 
     describe "days" do

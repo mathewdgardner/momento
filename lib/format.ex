@@ -1,9 +1,21 @@
 defmodule Momento.Format do
-  # A naive implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
-  @spec format(map, binary()) :: binary()
+  @doc """
+  Provide a `DateTime` struct and token string to get back a formatted date/datetime string.
+
+  ## Examples
+
+      iex> use Momento
+      ...> Momento.date |> Momento.format("YYYY-MM-DD")
+      "2016-07-01"
+
+      ...> Momento.date |> Momento.format("M-D-YY")
+      "7-1-16"
+  """
+  @spec format(DateTime.t, String.t) :: String.t
   def format(%DateTime{} = datetime, tokens)
   when is_bitstring(tokens)
   do
+    # A naive implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
     # 1970 1971 ... 2029 2030
     with tokens <- replace(tokens, "YYYY", datetime.year |> Integer.to_string),
 
@@ -21,6 +33,9 @@ defmodule Momento.Format do
 
       # 01 02 ... 11 12
       tokens <- replace(tokens, "MM", datetime.month |> Integer.to_string |> String.rjust(2, ?0)),
+
+      # 1 2 ... 11 12
+      tokens <- replace(tokens, "M", datetime.month |> Integer.to_string),
 
       # TODO: 1st 2nd ... 11th 12th
       # tokens <- replace(tokens, "Mo", datetime.month |> Integer.to_string),
