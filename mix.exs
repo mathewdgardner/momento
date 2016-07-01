@@ -9,7 +9,7 @@ defmodule Momento.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      preferred_cli_env: [espec: :test],
-     package: pacakge(),
+     package: package(),
      deps: deps()]
   end
 
