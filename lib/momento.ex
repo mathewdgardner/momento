@@ -15,4 +15,7 @@ defmodule Momento do
 
   # subtract/3
   def subtract(datetime, num, time), do: Momento.Subtract.subtract(datetime, num, time)
+
+  # format/2
+  def format(datetime, tokens), do: Momento.Format.format(datetime, tokens)
 end

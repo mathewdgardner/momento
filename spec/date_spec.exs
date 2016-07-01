@@ -31,7 +31,7 @@ defmodule DateSpec do
     end
   end
 
-  describe "date!", only: true do
+  describe "date!" do
     it "should return value" do
       expect(Momento.date!(1467316077)) |> to(be_struct DateTime)
     end
