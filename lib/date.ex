@@ -10,42 +10,45 @@ defmodule Momento.Date do
     cond do
       # ISO8601 - "2016-04-20T15:05:13.991Z"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}[tT\s][0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}[zZ]$/, arg) ->
-        [date, time] = String.split(arg, "T")
-        [year, month, day] = String.split(date, "-")
-        [hour, minute, seconds] = String.split(time, ":")
-        [second, milliseconds] = String.split(seconds, ".")
-        [millisecond, _] = String.split(milliseconds, "Z")
-
-        %DateTime{
-          year: String.to_integer(year),
-          month: String.to_integer(month),
-          day: String.to_integer(day),
-          hour: String.to_integer(hour),
-          minute: String.to_integer(minute),
-          second: String.to_integer(second),
-          microsecond: {String.to_integer(millisecond) * 1000, 6},
-          std_offset: 0,
-          utc_offset: 0,
-          time_zone: "Etc/UTC",
-          zone_abbr: "UTC"
-        }
+        with [date, time]         <- String.split(arg, "T"),
+          [year, month, day]      <- String.split(date, "-"),
+          [hour, minute, seconds] <- String.split(time, ":"),
+          [second, milliseconds]  <- String.split(seconds, "."),
+          [millisecond, _]        <- String.split(milliseconds, "Z")
+        do
+          %DateTime{
+            year: String.to_integer(year),
+            month: String.to_integer(month),
+            day: String.to_integer(day),
+            hour: String.to_integer(hour),
+            minute: String.to_integer(minute),
+            second: String.to_integer(second),
+            microsecond: {String.to_integer(millisecond) * 1000, 6},
+            std_offset: 0,
+            utc_offset: 0,
+            time_zone: "Etc/UTC",
+            zone_abbr: "UTC"
+          }
+        end
 
       # ISO date - "2016-04-20"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, arg) ->
-        [year, month, day] = String.split(arg, "-")
-        %DateTime{
-          year: String.to_integer(year),
-          month: String.to_integer(month),
-          day: String.to_integer(day),
-          hour: 0,
-          minute: 0,
-          second: 0,
-          microsecond: {0, 6},
-          std_offset: 0,
-          utc_offset: 0,
-          time_zone: "Etc/UTC",
-          zone_abbr: "UTC"
-        }
+        with [year, month, day] <- String.split(arg, "-")
+        do
+          %DateTime{
+            year: String.to_integer(year),
+            month: String.to_integer(month),
+            day: String.to_integer(day),
+            hour: 0,
+            minute: 0,
+            second: 0,
+            microsecond: {0, 6},
+            std_offset: 0,
+            utc_offset: 0,
+            time_zone: "Etc/UTC",
+            zone_abbr: "UTC"
+          }
+        end
 
       true -> {:error, "Unknown date format."}
     end
