@@ -58,7 +58,7 @@ defmodule Momento.Subtract do
 
   # Rollover days to the previous month
   def subtract(%DateTime{month: month, day: day} = datetime, num, :days)
-  when positive?(num) and day + num >= days_in_month(month - 1),
+  when positive?(num) and day - num < 0,
   do: subtract(%DateTime{datetime | day: days_in_month(month - 1)}, 1, :months) |> subtract(num - day, :days)
 
 

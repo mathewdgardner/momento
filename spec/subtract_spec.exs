@@ -83,13 +83,11 @@ defmodule SubtractSpec do
       end
 
       it "should subtract days and rollover months" do
-        days = 5 + Momento.Guards.days_in_month(shared.datetime.month - 1) +
-          Momento.Guards.days_in_month(shared.datetime.month - 2) +
-          Momento.Guards.days_in_month(shared.datetime.month - 3)
-          datetime = Momento.subtract(shared.datetime, days, :days)
+        days = 21
+        datetime = Momento.subtract(shared.datetime, days, :days)
 
-          expect(datetime.day) |> to(eq shared.datetime.day - 5)
-          expect(datetime.month) |> to(eq shared.datetime.month - 3)
+          expect(datetime.day) |> to(eq shared.datetime.day + 10)
+          expect(datetime.month) |> to(eq shared.datetime.month - 1)
       end
 
       it "should only subtract months" do
