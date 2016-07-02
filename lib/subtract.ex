@@ -8,8 +8,7 @@ defmodule Momento.Subtract do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date |> Momento.subtract(5, :years)
+      iex> Momento.date |> Momento.subtract(5, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {360239, 6},
        minute: 52, month: 7, second: 36, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2011, zone_abbr: "UTC"}

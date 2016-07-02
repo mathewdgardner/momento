@@ -2,15 +2,18 @@ defmodule Momento.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :momento,
-     version: "0.1.0",
-     description: description(),
-     elixir: "~> 1.3",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     preferred_cli_env: [espec: :test],
-     package: package(),
-     deps: deps()]
+    [
+      app: :momento,
+      version: "0.1.0",
+      description: description(),
+      elixir: "~> 1.3",
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      preferred_cli_env: [espec: :test, coveralls: :test],
+      package: package(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls, test_task: "espec"]
+    ]
   end
 
   # Configuration for the OTP application
@@ -32,6 +35,7 @@ defmodule Momento.Mixfile do
   defp deps do
     [
       {:espec, "~> 0.8", only: :test},
+      {:excoveralls, "~> 0.5", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

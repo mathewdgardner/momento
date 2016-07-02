@@ -6,8 +6,7 @@ defmodule Momento do
 
   ## Examples
 
-      iex> use Momento
-      ...> datetime = Momento.date
+      iex> Momento.date
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {827272, 6},
        minute: 27, month: 7, second: 19, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
@@ -20,8 +19,7 @@ defmodule Momento do
 
   ## Examples
 
-      iex> use Momento
-      ...> datetime |> Momento.date
+      Momento.date |> Momento.date
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {827272, 6},
        minute: 27, month: 7, second: 19, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
@@ -34,8 +32,7 @@ defmodule Momento do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date(1467408735)
+      iex> Momento.date(1467408735)
       {:ok,
        %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {0, 0},
         minute: 32, month: 7, second: 15, std_offset: 0, time_zone: "Etc/UTC",
@@ -66,8 +63,7 @@ defmodule Momento do
   Add a specified amount of time to a given DateTime struct.
 
   ## Examples
-      iex> use Momento
-      ...> Momento.date |> Momento.add(2, :years)
+      iex> Momento.date |> Momento.add(2, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {796482, 6},
        minute: 38, month: 7, second: 18, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2018, zone_abbr: "UTC"}
@@ -79,8 +75,7 @@ defmodule Momento do
   Subtract a specified amount of time to a given DateTime struct.
 
   ## Examples
-      iex> use Momento
-      ...> Momento.date |> Momento.subtract(2, :years)
+      iex> Momento.date |> Momento.subtract(2, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {19292, 6},
        minute: 39, month: 7, second: 11, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2014, zone_abbr: "UTC"}
@@ -92,8 +87,7 @@ defmodule Momento do
   Format a given DateTime struct to a desired date string.
 
   ## Examples
-      iex> use Momento
-      ...> Momento.date |> Momento.format("YYYY-MM-DD")
+      iex> Momento.date |> Momento.format("YYYY-MM-DD")
       "2016-07-01"
   """
   @spec format(DateTime.t, String.t) :: DateTime.t

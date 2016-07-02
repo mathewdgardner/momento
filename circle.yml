@@ -17,4 +17,4 @@ dependencies:
     - mix local.rebar --force
 test:
   override:
-    - mix espec
+    - mix coveralls.circle

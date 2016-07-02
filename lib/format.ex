@@ -4,8 +4,7 @@ defmodule Momento.Format do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date |> Momento.format("YYYY-MM-DD")
+      iex> Momento.date |> Momento.format("YYYY-MM-DD")
       "2016-07-01"
 
       ...> Momento.date |> Momento.format("M-D-YY")

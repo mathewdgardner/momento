@@ -8,8 +8,7 @@ defmodule Momento.Add do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date |> Momento.add(5, :years)
+      iex> Momento.date |> Momento.add(5, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {703979, 6},
        minute: 34, month: 7, second: 50, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2021, zone_abbr: "UTC"}

@@ -4,8 +4,7 @@ defmodule Momento.Helpers do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.Helpers.floor(5.22)
+      iex> Momento.Helpers.floor(5.22)
       5
   """
   @spec floor(float) :: integer
@@ -16,8 +15,7 @@ defmodule Momento.Helpers do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.Helpers.millisecond_factor(6)
+      iex> Momento.Helpers.millisecond_factor(6)
       1000
   """
   @spec millisecond_factor(integer) :: integer
@@ -28,8 +26,7 @@ defmodule Momento.Helpers do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.Helpers.microsecond_factor(6)
+      iex> Momento.Helpers.microsecond_factor(6)
       1000000
   """
   @spec microsecond_factor(integer) :: integer

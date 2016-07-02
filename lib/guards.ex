@@ -4,8 +4,7 @@ defmodule Momento.Guards do
 
   ## Examples
 
-      iex> require Momento.Guards
-      ...> Momento.Guards.natural?(5)
+      iex> Momento.Guards.natural?(5)
       true
 
       ...> Momento.Guards.natural?(0)
@@ -22,8 +21,7 @@ defmodule Momento.Guards do
 
   ## Examples
 
-      iex> require Momento.Guards
-      ...> Momento.Guards.positive?(5)
+      iex> Momento.Guards.positive?(5)
       true
 
       ...> Momento.Guards.positive?(0)
@@ -40,8 +38,7 @@ defmodule Momento.Guards do
 
   ## Examples
 
-      iex> require Momento.Guards
-      ...> Momento.Guards.negative?(-5)
+      iex> Momento.Guards.negative?(-5)
       true
 
       ...> Momento.Guards.negative?(0)
@@ -58,8 +55,7 @@ defmodule Momento.Guards do
 
   ## Examples
 
-      iex> require Momento.Guards
-      ...> Momento.Guards.days_in_month(2)
+      iex> Momento.Guards.days_in_month(2)
       28
 
       ...> Momento.Guards.days_in_month(14)

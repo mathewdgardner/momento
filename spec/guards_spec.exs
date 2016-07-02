@@ -2,6 +2,7 @@ defmodule GuardsSpec do
   require Momento
   import Momento.Guards
   use ESpec
+  doctest Momento.Guards
 
   describe "Custom guards" do
     describe "natural?" do

@@ -4,8 +4,7 @@ defmodule Momento.Date do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date
+      iex> Momento.date
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {732692, 6},
        minute: 56, month: 7, second: 5, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
@@ -19,8 +18,7 @@ defmodule Momento.Date do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date |> Momento.date
+      iex> Momento.date |> Momento.date
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {259334, 6},
        minute: 56, month: 7, second: 46, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
@@ -33,13 +31,12 @@ defmodule Momento.Date do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date("2016-04-20T15:05:13.991Z")
+      iex> Momento.date("2016-04-20T15:05:13.991Z")
       %DateTime{calendar: Calendar.ISO, day: 20, hour: 15, microsecond: {991000, 6},
        minute: 5, month: 4, second: 13, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
 
-      ...> Momento.date("2016-04-20")
+      iex> Momento.date("2016-04-20")
       %DateTime{calendar: Calendar.ISO, day: 20, hour: 0, microsecond: {0, 6},
        minute: 0, month: 4, second: 0, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
@@ -101,8 +98,7 @@ defmodule Momento.Date do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date(1467413967)
+      iex> Momento.date(1467413967)
       {:ok,
        %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {0, 0},
         minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
@@ -138,8 +134,7 @@ defmodule Momento.Date do
 
   ## Examples
 
-      iex> use Momento
-      ...> Momento.date!(1467413967)
+      iex> Momento.date!(1467413967)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {0, 0},
        minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
