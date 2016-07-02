@@ -104,13 +104,11 @@ defmodule AddSpec do
       end
 
       it "should add days and rollover months" do
-        days = 5 + Momento.Guards.days_in_month(shared.datetime.month) +
-          Momento.Guards.days_in_month(shared.datetime.month + 1) +
-          Momento.Guards.days_in_month(shared.datetime.month + 2)
-          datetime = Momento.add(shared.datetime, days, :days)
+        days = 21
+        datetime = Momento.add(shared.datetime, days, :days)
 
-          expect(datetime.day) |> to(eq shared.datetime.day + 5)
-          expect(datetime.month) |> to(eq shared.datetime.month + 3)
+          expect(datetime.day) |> to(eq 6)
+          expect(datetime.month) |> to(eq shared.datetime.month + 1)
       end
 
       it "should only add months" do
@@ -152,11 +150,11 @@ defmodule AddSpec do
       end
 
       it "should add hours and rollover days" do
-        hours = 52
+        hours = 15
         datetime = Momento.add(shared.datetime, hours, :hours)
 
-        expect(datetime.hour) |> to(eq shared.datetime.hour + 4)
-        expect(datetime.day) |> to(eq shared.datetime.day + 2)
+        expect(datetime.hour) |> to(eq 3)
+        expect(datetime.day) |> to(eq shared.datetime.day + 1)
       end
 
       it "should only add days" do
@@ -196,11 +194,11 @@ defmodule AddSpec do
       end
 
       it "should add minutes and rollover hours" do
-        minutes = 150
+        minutes = 50
         datetime = Momento.add(shared.datetime, minutes, :minutes)
 
-        expect(datetime.minute) |> to(eq shared.datetime.minute + 30)
-        expect(datetime.hour) |> to(eq shared.datetime.hour + 2)
+        expect(datetime.minute) |> to(eq 4)
+        expect(datetime.hour) |> to(eq shared.datetime.hour + 1)
       end
 
       it "should only add hours" do
@@ -240,11 +238,11 @@ defmodule AddSpec do
       end
 
       it "should add seconds and rollover minutes" do
-        seconds = 150
+        seconds = 50
         datetime = Momento.add(shared.datetime, seconds, :seconds)
 
-        expect(datetime.second) |> to(eq shared.datetime.second + 30)
-        expect(datetime.minute) |> to(eq shared.datetime.minute + 2)
+        expect(datetime.second) |> to(eq 4)
+        expect(datetime.minute) |> to(eq shared.datetime.minute + 1)
       end
 
       it "should add only minutes" do

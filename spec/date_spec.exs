@@ -4,6 +4,13 @@ defmodule DateSpec do
   use ESpec
 
   describe "date" do
+    it "should return exactly what was given" do
+      datetime = Momento.date
+      sameDatetime = Momento.date(datetime)
+
+      expect(sameDatetime) |> to(eql datetime)
+    end
+
     describe "unix" do
       it "should return a DateTime struct from a unix timestamp in seconds" do
         {:ok, datetime} = Momento.date(1467316077)

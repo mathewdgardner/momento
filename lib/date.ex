@@ -1,4 +1,6 @@
 defmodule Momento.Date do
+  import Momento.Guards
+
   @moduledoc """
   This module holds all the various `date/0`, 'date/1' and `date!/1` methods.
   """
@@ -52,45 +54,43 @@ defmodule Momento.Date do
     cond do
       # ISO8601 - "2016-04-20T15:05:13.991Z"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}[tT\s][0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}[zZ]$/, arg) ->
-        with [date, time]         <- String.split(arg, "T"),
-          [year, month, day]      <- String.split(date, "-"),
-          [hour, minute, seconds] <- String.split(time, ":"),
-          [second, milliseconds]  <- String.split(seconds, "."),
-          [millisecond, _]        <- String.split(milliseconds, "Z")
-        do
-          %DateTime{
-            year: String.to_integer(year),
-            month: String.to_integer(month),
-            day: String.to_integer(day),
-            hour: String.to_integer(hour),
-            minute: String.to_integer(minute),
-            second: String.to_integer(second),
-            microsecond: {String.to_integer(millisecond) * 1000, 6},
-            std_offset: 0,
-            utc_offset: 0,
-            time_zone: "Etc/UTC",
-            zone_abbr: "UTC"
-          }
-        end
+        [date, time] = String.split(arg, "T")
+        [year, month, day] = String.split(date, "-")
+        [hour, minute, seconds] = String.split(time, ":")
+        [second, milliseconds] = String.split(seconds, ".")
+        [millisecond, _] = String.split(milliseconds, "Z")
+
+        %DateTime{
+          year: String.to_integer(year),
+          month: String.to_integer(month),
+          day: String.to_integer(day),
+          hour: String.to_integer(hour),
+          minute: String.to_integer(minute),
+          second: String.to_integer(second),
+          microsecond: {String.to_integer(millisecond) * 1000, 6},
+          std_offset: 0,
+          utc_offset: 0,
+          time_zone: "Etc/UTC",
+          zone_abbr: "UTC"
+        }
 
       # ISO date - "2016-04-20"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, arg) ->
-        with [year, month, day] <- String.split(arg, "-")
-        do
-          %DateTime{
-            year: String.to_integer(year),
-            month: String.to_integer(month),
-            day: String.to_integer(day),
-            hour: 0,
-            minute: 0,
-            second: 0,
-            microsecond: {0, 6},
-            std_offset: 0,
-            utc_offset: 0,
-            time_zone: "Etc/UTC",
-            zone_abbr: "UTC"
-          }
-        end
+        [year, month, day] = String.split(arg, "-")
+
+        %DateTime{
+          year: String.to_integer(year),
+          month: String.to_integer(month),
+          day: String.to_integer(day),
+          hour: 0,
+          minute: 0,
+          second: 0,
+          microsecond: {0, 6},
+          std_offset: 0,
+          utc_offset: 0,
+          time_zone: "Etc/UTC",
+          zone_abbr: "UTC"
+        }
 
       true -> {:error, "Unknown date format."}
     end
@@ -126,11 +126,12 @@ defmodule Momento.Date do
         minute: 2, month: 7, second: 24, std_offset: 0, time_zone: "Etc/UTC",
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
+  # TODO: This is probably wrong
   @spec date(integer) :: {:ok, DateTime.t}
   def date(s) when is_integer(s) and s > 999999999999999999, do: DateTime.from_unix(s, :nanoseconds)
   def date(s) when is_integer(s) and s > 999999999999999, do: DateTime.from_unix(s, :microseconds)
   def date(s) when is_integer(s) and s > 999999999999, do: DateTime.from_unix(s, :milliseconds)
-  def date(s) when is_integer(s) and s > 999999999, do: DateTime.from_unix(s, :seconds)
+  def date(s) when is_integer(s) and positive?(s), do: DateTime.from_unix(s, :seconds)
 
   @doc """
   Get a `DateTime` struct from a UNIX timestamp without the tuple. You can provide `seconds`, `milliseconds`,

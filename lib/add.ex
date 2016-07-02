@@ -83,7 +83,7 @@ defmodule Momento.Add do
   # Rollver days to be the next month
   def add(%DateTime{month: month, day: day} = datetime, num, :days)
   when positive?(num) and day + num > days_in_month(month),
-  do: add(%DateTime{datetime | day: 1}, 1, :months) |> add(-(days_in_month(month) - day - num + 1), :days)
+  do: add(%DateTime{datetime | day: 1}, 1, :months) |> add(num - (days_in_month(month) - day) - 1, :days)
 
 
   # Hours
@@ -103,8 +103,8 @@ defmodule Momento.Add do
 
   # Rollover hours to be the next day
   def add(%DateTime{hour: hour} = datetime, num, :hours)
-  when positive?(num) and num + hour >= 24,
-  do: add(%DateTime{datetime | hour: 0}, 1, :days) |> add(-(24 - hour - num), :hours)
+  when positive?(num) and num + hour > 23,
+  do: add(%DateTime{datetime | hour: 0}, 1, :days) |> add(num - (24 - hour), :hours)
 
 
   # Minutes
@@ -125,7 +125,7 @@ defmodule Momento.Add do
   # Rollover minutes to be the next hour
   def add(%DateTime{minute: minute} = datetime, num, :minutes)
   when positive?(num) and num + minute >= 60,
-  do: add(%DateTime{datetime | minute: 0}, 1, :hours) |> add(-(60 - minute - num), :minutes)
+  do: add(%DateTime{datetime | minute: 0}, 1, :hours) |> add(num - (60 - minute) - 1, :minutes)
 
 
   # Seconds
@@ -146,7 +146,7 @@ defmodule Momento.Add do
   # Rollover seconds to be the next minute
   def add(%DateTime{second: second} = datetime, num, :seconds)
   when positive?(num) and num + second >= 60,
-  do: add(%DateTime{datetime | second: 0}, 1, :minutes) |> add(-(60 - second - num), :seconds)
+  do: add(%DateTime{datetime | second: 0}, 1, :minutes) |> add(num - (60 - second) - 1, :seconds)
 
 
   # Milliseconds

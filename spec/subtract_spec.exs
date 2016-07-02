@@ -124,7 +124,7 @@ defmodule SubtractSpec do
 
     describe "hours" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 12}}
+        {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 9}}
       end
 
       it "should map singular to plural" do
@@ -150,11 +150,11 @@ defmodule SubtractSpec do
       end
 
       it "should subtract hours and rollover days" do
-        hours = 52
+        hours = 15
         datetime = Momento.subtract(shared.datetime, hours, :hours)
 
-        expect(datetime.hour) |> to(eq shared.datetime.hour - 4)
-        expect(datetime.day) |> to(eq shared.datetime.day - 2)
+        expect(datetime.hour) |> to(eq 18)
+        expect(datetime.day) |> to(eq shared.datetime.day - 1)
       end
 
       it "should only subtract days" do
