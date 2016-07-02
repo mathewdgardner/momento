@@ -1,4 +1,8 @@
 defmodule Momento.Date do
+  @moduledoc """
+  This module holds all the various `date/0`, 'date/1' and `date!/1` methods.
+  """
+
   @doc """
   Get a `DateTime` struct representng now.
 

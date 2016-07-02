@@ -1,6 +1,11 @@
 defmodule Momento do
   require Momento.Guards
 
+  @moduledoc """
+  Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for the purpose of parsing, validating,
+  manipulating, and formatting dates.
+  """
+
   @doc """
   Provides a DateTime struct representing the current date and time.
 

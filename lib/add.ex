@@ -2,6 +2,10 @@ defmodule Momento.Add do
   import Momento.Guards
   import Momento.Helpers
 
+  @moduledoc """
+  This module holds all the various `add/3` methods.
+  """
+
   @doc """
   Add a specified amount of time. Available atoms are `:years`, `:months`, `:days`, `:hours`, `:minutes`, `:seconds`,
   `:milliseconds` and `:microseconds`.

@@ -2,6 +2,10 @@ defmodule Momento.Subtract do
   import Momento.Guards
   import Momento.Helpers
 
+  @moduledoc """
+  This module holds all the various `subtract/3` methods.
+  """
+
   @doc """
   Subtract a specified amount of time. Available atoms are `:years`, `:months`, `:days`, `:hours`, `:minutes`,
   `:seconds`, `:milliseconds` and `:microseconds`.

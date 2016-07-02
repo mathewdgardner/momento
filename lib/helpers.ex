@@ -1,4 +1,8 @@
 defmodule Momento.Helpers do
+  @moduledoc """
+  This module holds all the various herlper methods, `floor/1`, `millisecond_factor/1` and `microsecond_factor/1`.
+  """
+
   @doc """
   Helper to get the floor of a `float` in the form of an `integer`.
 

@@ -1,4 +1,8 @@
 defmodule Momento.Guards do
+  @moduledoc """
+  This module holds all the various custom guards `natural?/1`, `positive?/1`, `negative?/1` and `days_in_month/1`.
+  """
+
   @doc """
   Is in the set of natural numbers?
 

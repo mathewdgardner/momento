@@ -1,4 +1,8 @@
 defmodule Momento.Format do
+  @moduledoc """
+  This module holds all the `format/2` method.
+  """
+
   @doc """
   Provide a `DateTime` struct and token string to get back a formatted date/datetime string.
 
