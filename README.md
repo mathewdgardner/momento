@@ -49,7 +49,7 @@ Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for t
 
     ```elixir
     def deps do
-      [{:momento, "~> 0.1.0"}]
+      [{:momento, "~> 0.1.1"}]
     end
     ```
 
