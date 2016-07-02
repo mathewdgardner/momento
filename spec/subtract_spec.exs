@@ -9,6 +9,13 @@ defmodule SubtractSpec do
         {:shared, datetime: %DateTime{Momento.date | year: 2016}}
       end
 
+      it "should map singular to plural" do
+        years = 1
+        datetime = Momento.subtract(shared.datetime, years, :year)
+
+        expect(datetime.year) |> to(eq shared.datetime.year - years)
+      end
+
       it "should subtract nothing" do
         num = 0
         datetime = Momento.subtract(shared.datetime, num, :years)
@@ -27,6 +34,13 @@ defmodule SubtractSpec do
     describe "months" do
       before do
         {:shared, datetime: %DateTime{Momento.date | month: 6}}
+      end
+
+      it "should map singular to plural" do
+        months = 1
+        datetime = Momento.subtract(shared.datetime, months, :month)
+
+        expect(datetime.month) |> to(eq shared.datetime.month - months)
       end
 
       it "should subtract nothing" do
@@ -65,6 +79,13 @@ defmodule SubtractSpec do
     describe "days" do
       before do
         {:shared, datetime: %DateTime{Momento.date | month: 6, day: 15}}
+      end
+
+      it "should map singular to plural" do
+        days = 1
+        datetime = Momento.subtract(shared.datetime, days, :day)
+
+        expect(datetime.day) |> to(eq shared.datetime.day - days)
       end
 
       it "should subtract nothing" do
@@ -106,6 +127,13 @@ defmodule SubtractSpec do
         {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 12}}
       end
 
+      it "should map singular to plural" do
+        hours = 1
+        datetime = Momento.subtract(shared.datetime, hours, :hour)
+
+        expect(datetime.hour) |> to(eq shared.datetime.hour - hours)
+      end
+
       it "should subtract nothing" do
         hours = 0
         datetime = Momento.subtract(shared.datetime, hours, :hours)
@@ -141,6 +169,13 @@ defmodule SubtractSpec do
     describe "minutes" do
       before do
         {:shared, datetime: %DateTime{Momento.date | hour: 12, minute: 15}}
+      end
+
+      it "should map singular to plural" do
+        minutes = 1
+        datetime = Momento.subtract(shared.datetime, minutes, :minute)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute - minutes)
       end
 
       it "should subtract nothing" do
@@ -180,6 +215,13 @@ defmodule SubtractSpec do
         {:shared, datetime: %DateTime{Momento.date | minute: 15, second: 15}}
       end
 
+      it "should map singular to plural" do
+        seconds = 1
+        datetime = Momento.subtract(shared.datetime, seconds, :second)
+
+        expect(datetime.second) |> to(eq shared.datetime.second - seconds)
+      end
+
       it "should subtract nothing" do
         seconds = 0
         datetime = Momento.subtract(shared.datetime, seconds, :seconds)
@@ -215,6 +257,13 @@ defmodule SubtractSpec do
     describe "microseconds" do
       before do
         {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+      end
+
+      it "should map singular to plural" do
+        microseconds = 0
+        datetime = Momento.subtract(shared.datetime, microseconds, :microsecond)
+
+        expect(datetime) |> to(eq shared.datetime)
       end
 
       it "should subtract nothing" do

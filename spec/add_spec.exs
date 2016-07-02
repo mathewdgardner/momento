@@ -9,24 +9,38 @@ defmodule AddSpec do
         {:shared, datetime: %DateTime{Momento.date | year: 2016}}
       end
 
-      it "should add nothing" do
-        num = 0
-        datetime = Momento.add(shared.datetime, num, :years)
+      it "should map singular to plural" do
+        years = 1
+        datetime = Momento.add(shared.datetime, years, :year)
 
-        expect(datetime.year) |> to(eq shared.datetime.year + num)
+        expect(datetime.year) |> to(eq shared.datetime.year + years)
+      end
+
+      it "should add nothing" do
+        years = 0
+        datetime = Momento.add(shared.datetime, years, :years)
+
+        expect(datetime.year) |> to(eq shared.datetime.year + years)
       end
 
       it "should add some years" do
-        num = 5
-        datetime = Momento.add(shared.datetime, num, :years)
+        years = 5
+        datetime = Momento.add(shared.datetime, years, :years)
 
-        expect(datetime.year) |> to(eq shared.datetime.year + num)
+        expect(datetime.year) |> to(eq shared.datetime.year + years)
       end
     end
 
     describe "months" do
       before do
         {:shared, datetime: %DateTime{Momento.date | month: 6}}
+      end
+
+      it "should map singular to plural" do
+        months = 1
+        datetime = Momento.add(shared.datetime, months, :month)
+
+        expect(datetime.month) |> to(eq shared.datetime.month + months)
       end
 
       it "should add nothing" do
@@ -65,6 +79,13 @@ defmodule AddSpec do
     describe "days" do
       before do
         {:shared, datetime: %DateTime{Momento.date | month: 6, day: 15}}
+      end
+
+      it "should map singular to plural" do
+        days = 1
+        datetime = Momento.add(shared.datetime, days, :day)
+
+        expect(datetime.day) |> to(eq shared.datetime.day + days)
       end
 
       it "should add nothing" do
@@ -108,6 +129,13 @@ defmodule AddSpec do
         {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 12}}
       end
 
+      it "should map singular to plural" do
+        hours = 1
+        datetime = Momento.add(shared.datetime, hours, :hour)
+
+        expect(datetime.hour) |> to(eq shared.datetime.hour + hours)
+      end
+
       it "should add nothing" do
         hours = 0
         datetime = Momento.add(shared.datetime, hours, :hours)
@@ -143,6 +171,13 @@ defmodule AddSpec do
     describe "minutes" do
       before do
         {:shared, datetime: %DateTime{Momento.date | hour: 12, minute: 15}}
+      end
+
+      it "should map singular to plural" do
+        minutes = 1
+        datetime = Momento.add(shared.datetime, minutes, :minute)
+
+        expect(datetime.minute) |> to(eq shared.datetime.minute + minutes)
       end
 
       it "should add nothing" do
@@ -182,6 +217,13 @@ defmodule AddSpec do
         {:shared, datetime: %DateTime{Momento.date | minute: 15, second: 15}}
       end
 
+      it "should map singular to plural" do
+        seconds = 1
+        datetime = Momento.add(shared.datetime, seconds, :second)
+
+        expect(datetime.second) |> to(eq shared.datetime.second + seconds)
+      end
+
       it "should add nothing" do
         seconds = 0
         datetime = Momento.add(shared.datetime, seconds, :seconds)
@@ -217,6 +259,13 @@ defmodule AddSpec do
     describe "milliseconds" do
       before do
         {:shared, datetime: %DateTime{Momento.date | second: 15, microsecond: {123456, 6}}}
+      end
+
+      it "should map singular to plural" do
+        milliseconds = 0
+        datetime = Momento.add(shared.datetime, milliseconds, :millisecond)
+
+        expect(datetime) |> to(eq shared.datetime)
       end
 
       it "should add nothing" do
@@ -260,6 +309,13 @@ defmodule AddSpec do
     describe "microseconds" do
       before do
         {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+      end
+
+      it "should map singular to plural" do
+        microseconds = 0
+        datetime = Momento.add(shared.datetime, microseconds, :microsecond)
+
+        expect(datetime) |> to(eq shared.datetime)
       end
 
       it "should add nothing" do
