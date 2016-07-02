@@ -1,8 +1,9 @@
 ## Momento
 
-![master](https://circleci.com/gh/mathewdgardner/momento.svg?style=shield&circle-token=b7acdd3d8650f741723674973a0776d652f02e14)
-![hex](https://img.shields.io/hexpm/v/momento.svg)
-![coverage](https://coveralls.io/repos/github/mathewdgardner/momento/badge.svg?branch=master)
+[![master](https://circleci.com/gh/mathewdgardner/momento.svg?style=shield&circle-token=b7acdd3d8650f741723674973a0776d652f02e14)](https://circleci.com/gh/mathewdgardner/momento)
+[![hex](https://img.shields.io/hexpm/v/momento.svg)](https://hex.pm/packages/momento)
+[![coverage](https://coveralls.io/repos/github/mathewdgardner/momento/badge.svg?branch=master)](https://coveralls.io/github/mathewdgardner/momento?branch=master)
+[![gitter](https://badges.gitter.im/mathewdgardner/momento.png)](https://gitter.im/mathewdgardner/momento)
 
 Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for the purpose of parsing, validating, manipulating, and formatting dates.
 
