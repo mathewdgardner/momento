@@ -10,6 +10,26 @@ Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for t
 
 ### Getting started
 
+### Installation
+
+[Available in Hex](https://hex.pm/packages/momento), the package can be installed as:
+
+  1. Add `momento` to your list of dependencies in `mix.exs`:
+
+    ```elixir
+    def deps do
+      [{:momento, "~> 0.1.1"}]
+    end
+    ```
+
+  2. Ensure `momento` is started before your application:
+
+    ```elixir
+    def application do
+      [applications: [:momento]]
+    end
+    ```
+
 ### Usage
 
 ```elixir
@@ -40,26 +60,6 @@ Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for t
 > Momento.date |> Momento.format("x")
 "1467406270"
 ```
-
-### Installation
-
-[Available in Hex](https://hex.pm/packages/momento), the package can be installed as:
-
-  1. Add `momento` to your list of dependencies in `mix.exs`:
-
-    ```elixir
-    def deps do
-      [{:momento, "~> 0.1.1"}]
-    end
-    ```
-
-  2. Ensure `momento` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:momento]]
-    end
-    ```
 
 ### Roadmap
 
