@@ -14,7 +14,7 @@ dependencies:
     - erlang_version=$(awk '/erlang/ { print $2 }' .tool-versions) && asdf install erlang ${erlang_version}
     - elixir_version=$(awk '/elixir/ { print $2 }' .tool-versions) && asdf install elixir ${elixir_version}
     - yes | mix deps.get
-    - mix local.rebar
+    - mix local.rebar --force
 test:
   override:
     - mix espec
