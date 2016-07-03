@@ -15,6 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
   @spec format(DateTime.t, String.t) :: String.t
+  # TODO: Add support for escaping characters within square brackets []
   def format(%DateTime{} = datetime, tokens)
   when is_bitstring(tokens)
   do
@@ -171,6 +172,36 @@ defmodule Momento.Format do
 
       # TODO: 70 71 ... 29 30
       # tokens <- String.replace(tokens, "gg", datetime),
+
+      # TODO: Thursday, September 4 1986 8:30 PM
+      # tokens <- String.replace(tokens, "LLLL", datetime),
+
+      # TODO: September 4 1986 8:30 PM
+      # tokens <- String.replace(tokens, "LLL", datetime),
+
+      # TODO: September 4 1986
+      # tokens <- String.replace(tokens, "LL", datetime),
+
+      # TODO: 8:30:25 PM
+      # tokens <- String.replace(tokens, "LTS", datetime),
+
+      # TODO: 8:30 PM
+      # tokens <- String.replace(tokens, "LT", datetime),
+
+      # TODO: 09/04/1986
+      # tokens <- String.replace(tokens, "L", datetime),
+
+      # TODO: Thu, Sep 4 1986 8:30 PM
+      # tokens <- String.replace(tokens, "llll", datetime),
+
+      # TODO: Sep 4 1986 8:30 PM
+      # tokens <- String.replace(tokens, "lll", datetime),
+
+      # TODO: Sep 4 1986
+      # tokens <- String.replace(tokens, "ll", datetime),
+
+      # TODO: 9/4/1986
+      # tokens <- String.replace(tokens, "l", datetime),
 
       # 1360013296
       tokens <- String.replace(tokens, "X", datetime |> DateTime.to_unix |> Integer.to_string),

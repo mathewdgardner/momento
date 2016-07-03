@@ -173,5 +173,18 @@ defmodule FormatSpec do
         shared.datetime |> Momento.format("x") |> expect |> to(eql "1467374405000")
       end
     end
+
+    describe "localized formats" do
+      it "should replace the LLLL token with full month, day of month, day of week, year and 12 hour formatted time"
+      it "should replace the LLL token with full month, day of month, year and 12 hour formatted time"
+      it "should replace the LL token with full month, day of month and year"
+      it "should replace the LTS token with 12 hour formatted time with seconds"
+      it "should replace the LT token with 12 hour formatted time"
+      it "should replace the L token with month numeral, day of month, year"
+      it "should replace the llll token with abbreviated month, day of month, day of week, year and 12 hour formatted time"
+      it "should replace the lll token with abbreviated month, day of month, year and 12 hour formatted time"
+      it "should replace the ll token with abbreviated month, day of month and year"
+      it "should replace the l token with abbreviated numeral, day of month, year"
+    end
   end
 end
