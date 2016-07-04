@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|MM?M?M?|DD?D?D?|HH?|mm?|ss?|X|x/
+  @tokens ~r/YYYY|YY?|MMMM|MMM|MM?M?M?|DD?D?D?|HH?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -39,10 +39,10 @@ defmodule Momento.Format do
           # "Y" -> datetime.year |> Integer.to_string)
 
           # TODO: January February ... November December
-          # "MMMM" -> datetime.month |> Integer.to_string
+          "MMMM" -> datetime.month |> get_month_name
 
           # TODO: Jan Feb ... Nov Dec
-          # "MMM" -> datetime.month |> Integer.to_string
+          "MMM" -> datetime.month |> get_month_name(:MMM)
 
           # 01 02 ... 11 12
           "MM" -> datetime.month |> Integer.to_string |> String.rjust(2, ?0)
@@ -225,4 +225,13 @@ defmodule Momento.Format do
       # Recombine the pieces
       |> Enum.join
   end
+
+  defp get_month_name(month_number, token \\ :MMMM) do
+    month_name = elem({"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}, month_number-1)
+    case token do
+      :MMM -> String.slice(month_name, 0..2)
+       _ -> month_name
+    end
+  end
+
 end

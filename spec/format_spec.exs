@@ -24,8 +24,13 @@ defmodule FormatSpec do
         {:shared, datetime: %DateTime{Momento.date! | month: 5}}
       end
 
-      it "should replace the MMMM token with the full month name"
-      it "should replace the MMM token with the month abbreviation"
+      it "should replace the MMMM token with the full month name" do
+        shared.datetime |> Momento.format("MMMM") |> expect |> to(eql "May")
+      end
+
+      it "should replace the MMM token with the month abbreviation" do
+        %DateTime{Momento.date! | month: 6} |> Momento.format("MMM") |> expect |> to(eql "Jun")
+      end
 
       it "should replace the MM token with two digit month of year padded with a zero" do
         shared.datetime |> Momento.format("MM") |> expect |> to(eql "05")
