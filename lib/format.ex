@@ -217,6 +217,8 @@ defmodule Momento.Format do
 
           # 1360013296123
           "x" -> datetime |> DateTime.to_unix(:milliseconds) |> Integer.to_string
+
+          _ -> token
         end
       end)
 
