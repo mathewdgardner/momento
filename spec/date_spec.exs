@@ -5,8 +5,8 @@ defmodule DateSpec do
 
   describe "date" do
     it "should return exactly what was given" do
-      datetime = Momento.date
-      sameDatetime = Momento.date(datetime)
+      {:ok, datetime} = Momento.date
+      {:ok, sameDatetime} = Momento.date(datetime)
 
       expect(sameDatetime) |> to(eql datetime)
     end
@@ -14,28 +14,32 @@ defmodule DateSpec do
     describe "unix" do
       it "should return a DateTime struct from a unix timestamp in seconds" do
         {:ok, datetime} = Momento.date(1467316077)
+
         expect datetime |> to(be_struct DateTime)
       end
 
       it "should return a DateTime struct from a unix timestamp in millisconds" do
         {:ok, datetime} = Momento.date(1467316261999)
+
         expect datetime |> to(be_struct DateTime)
       end
 
       it "should return a DateTime struct from a unix timestamp in microsconds" do
         {:ok, datetime} = Momento.date(1467316272333763)
+
         expect datetime |> to(be_struct DateTime)
       end
 
       it "should return a DateTime struct from a unix timestamp in nanosconds" do
         {:ok, datetime} = Momento.date(1467316281921158374)
+
         expect datetime |> to(be_struct DateTime)
       end
     end
 
     describe "ISO8601" do
       it "should return a DateTime struct from a ISO8601 string" do
-        datetime = Momento.date("2016-04-20T15:05:13.991Z")
+        {:ok, datetime} = Momento.date("2016-04-20T15:05:13.991Z")
 
         expect(datetime.year) |> to(eql 2016)
         expect(datetime.month) |> to(eql 4)
@@ -49,7 +53,7 @@ defmodule DateSpec do
 
     describe "ISO date" do
       it "should return a DateTime struct from a ISO date string" do
-        datetime = Momento.date("2016-04-20")
+        {:ok, datetime} = Momento.date("2016-04-20")
 
         expect(datetime.year) |> to(eql 2016)
         expect(datetime.month) |> to(eql 4)

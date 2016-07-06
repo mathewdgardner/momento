@@ -12,17 +12,17 @@ defmodule Momento.Subtract do
 
   ## Examples
 
-      iex> Momento.date |> Momento.subtract(5, :years)
+      iex> Momento.date! |> Momento.subtract(5, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {360239, 6},
        minute: 52, month: 7, second: 36, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2011, zone_abbr: "UTC"}
 
-      ...> Momento.date |> Momento.subtract(5, :days)
+      ...> Momento.date! |> Momento.subtract(5, :days)
       %DateTime{calendar: Calendar.ISO, day: 26, hour: 22, microsecond: {692138, 6},
        minute: 52, month: 6, second: 51, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
 
-      ...> Momento.date |> Momento.subtract(5, :hours) |> Momento.subtract(15, :minutes)
+      ...> Momento.date! |> Momento.subtract(5, :hours) |> Momento.subtract(15, :minutes)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 17, microsecond: {826184, 6},
        minute: 38, month: 7, second: 22, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}

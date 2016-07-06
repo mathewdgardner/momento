@@ -11,43 +11,40 @@ defmodule Momento.Date do
   ## Examples
 
       iex> Momento.date
-      %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {732692, 6},
-       minute: 56, month: 7, second: 5, std_offset: 0, time_zone: "Etc/UTC",
-       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
+      {:ok,
+       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {732692, 6},
+        minute: 56, month: 7, second: 5, std_offset: 0, time_zone: "Etc/UTC",
+        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date() :: DateTime.t
-  def date, do: DateTime.from_unix!(:erlang.system_time(:nano_seconds), :nanoseconds)
-
+  @spec date :: {:ok, DateTime.t}
+  def date, do: {:ok, :erlang.system_time(:nano_seconds) |> DateTime.from_unix!(:nanoseconds)}
 
   @doc """
-  Spits back the given `DateTime` struct, for convenience.
-
-  ## Examples
-
-      iex> Momento.date |> Momento.date
-      %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {259334, 6},
-       minute: 56, month: 7, second: 46, std_offset: 0, time_zone: "Etc/UTC",
-       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
-  """
-  @spec date(DateTime.t) :: DateTime.t
-  def date(%DateTime{} = arg), do: arg
-
-  @doc """
-  Get a `DateTime` struct by parsing a given string. Currently, only ISO8601 and ISO date strings are supported.
+  Provides a `DateTime` struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
 
   ## Examples
 
       iex> Momento.date("2016-04-20T15:05:13.991Z")
-      %DateTime{calendar: Calendar.ISO, day: 20, hour: 15, microsecond: {991000, 6},
-       minute: 5, month: 4, second: 13, std_offset: 0, time_zone: "Etc/UTC",
-       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
+      {:ok,
+       %DateTime{calendar: Calendar.ISO, day: 20, hour: 15, microsecond: {991000, 6},
+        minute: 5, month: 4, second: 13, std_offset: 0, time_zone: "Etc/UTC",
+        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
 
-      iex> Momento.date("2016-04-20")
-      %DateTime{calendar: Calendar.ISO, day: 20, hour: 0, microsecond: {0, 6},
-       minute: 0, month: 4, second: 0, std_offset: 0, time_zone: "Etc/UTC",
-       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
+      ...> Momento.date("2016-04-20")
+      {:ok,
+       %DateTime{calendar: Calendar.ISO, day: 20, hour: 0, microsecond: {0, 6},
+        minute: 0, month: 4, second: 0, std_offset: 0, time_zone: "Etc/UTC",
+        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
+
+      ...> Momento.date(1467413967)
+      {:ok,
+       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {0, 0},
+        minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
+        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date(String.t) :: DateTime.t
+  @spec date(any) :: {:ok, DateTime.t}
+  def date(%DateTime{} = arg), do: {:ok, arg}
+
   # TODO: Add timezone support
   # TODO: Add more formats to parse
   def date(arg) when is_bitstring(arg) do
@@ -60,7 +57,7 @@ defmodule Momento.Date do
         [second, milliseconds] = String.split(seconds, ".")
         [millisecond, _] = String.split(milliseconds, "Z")
 
-        %DateTime{
+        {:ok, %DateTime{
           year: String.to_integer(year),
           month: String.to_integer(month),
           day: String.to_integer(day),
@@ -72,13 +69,13 @@ defmodule Momento.Date do
           utc_offset: 0,
           time_zone: "Etc/UTC",
           zone_abbr: "UTC"
-        }
+        }}
 
       # ISO date - "2016-04-20"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, arg) ->
         [year, month, day] = String.split(arg, "-")
 
-        %DateTime{
+        {:ok, %DateTime{
           year: String.to_integer(year),
           month: String.to_integer(month),
           day: String.to_integer(day),
@@ -90,60 +87,51 @@ defmodule Momento.Date do
           utc_offset: 0,
           time_zone: "Etc/UTC",
           zone_abbr: "UTC"
-        }
+        }}
 
       true -> {:error, "Unknown date format."}
     end
   end
 
+  # TODO: These are probably wrong
+  def date(arg) when is_integer(arg) and arg > 999999999999999999, do: DateTime.from_unix(arg, :nanoseconds)
+  def date(arg) when is_integer(arg) and arg > 999999999999999, do: DateTime.from_unix(arg, :microseconds)
+  def date(arg) when is_integer(arg) and arg > 999999999999, do: DateTime.from_unix(arg, :milliseconds)
+  def date(arg) when is_integer(arg) and positive?(arg), do: DateTime.from_unix(arg, :seconds)
+
   @doc """
-  Get a `DateTime` struct from a UNIX timestamp. You can provide `seconds`, `milliseconds`,  `microseconds` and
-  `nanoseconds`.
+  Shortcut to get a `DateTime` struct representing now.
 
   ## Examples
 
-      iex> Momento.date(1467413967)
-      {:ok,
-       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {0, 0},
-        minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
-        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
-
-      ...> Momento.date(1467414084898)
-      {:ok,
-       %DateTime{calendar: Calendar.ISO, day: 1, hour: 23, microsecond: {898000, 3},
-        minute: 1, month: 7, second: 24, std_offset: 0, time_zone: "Etc/UTC",
-        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
-
-      ...> Momento.date(1467414112393174)
-      {:ok,
-       %DateTime{calendar: Calendar.ISO, day: 1, hour: 23, microsecond: {393174, 6},
-        minute: 1, month: 7, second: 52, std_offset: 0, time_zone: "Etc/UTC",
-        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
-
-      ...> Momento.date(1467414144089210599)
-      {:ok,
-       %DateTime{calendar: Calendar.ISO, day: 1, hour: 23, microsecond: {89210, 6},
-        minute: 2, month: 7, second: 24, std_offset: 0, time_zone: "Etc/UTC",
-        utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
+      iex> Momento.date!
+      %DateTime{calendar: Calendar.ISO, day: 1, hour: 21, microsecond: {0, 0},
+       minute: 32, month: 7, second: 15, std_offset: 0, time_zone: "Etc/UTC",
+       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  # TODO: This is probably wrong
-  @spec date(integer) :: {:ok, DateTime.t}
-  def date(s) when is_integer(s) and s > 999999999999999999, do: DateTime.from_unix(s, :nanoseconds)
-  def date(s) when is_integer(s) and s > 999999999999999, do: DateTime.from_unix(s, :microseconds)
-  def date(s) when is_integer(s) and s > 999999999999, do: DateTime.from_unix(s, :milliseconds)
-  def date(s) when is_integer(s) and positive?(s), do: DateTime.from_unix(s, :seconds)
+  @spec date! :: DateTime.t
+  def date!, do: ({:ok, datetime} = date; datetime)
 
   @doc """
-  Get a `DateTime` struct from a UNIX timestamp without the tuple. You can provide `seconds`, `milliseconds`,
-  `microseconds` and `nanoseconds`.
+  Shortcut to get a `DateTime` struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
 
   ## Examples
 
-      iex> Momento.date!(1467413967)
+      iex> Momento.date!("2016-04-20T15:05:13.991Z")
+      %DateTime{calendar: Calendar.ISO, day: 20, hour: 15, microsecond: {991000, 6},
+       minute: 5, month: 4, second: 13, std_offset: 0, time_zone: "Etc/UTC",
+       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
+
+      ...> Momento.date!("2016-04-20")
+      %DateTime{calendar: Calendar.ISO, day: 20, hour: 0, microsecond: {0, 6},
+       minute: 0, month: 4, second: 0, std_offset: 0, time_zone: "Etc/UTC",
+       utc_offset: 0, year: 2016, zone_abbr: "UTC"}
+
+      ...> Momento.date!(1467413967)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {0, 0},
        minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  @spec date(integer) :: DateTime.t
-  def date!(s), do: ({:ok, datetime} = date(s); datetime)
+  @spec date!(any) :: DateTime.t
+  def date!(arg) when is_integer(arg), do: ({:ok, datetime} = date(arg); datetime)
 end

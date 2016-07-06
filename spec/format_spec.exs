@@ -5,7 +5,7 @@ defmodule FormatSpec do
   describe "format" do
     describe "years" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | year: 2016}}
+        {:shared, datetime: %DateTime{Momento.date! | year: 2016}}
       end
 
       it "should replace the YYYY token with a four digit year" do
@@ -21,7 +21,7 @@ defmodule FormatSpec do
 
     describe "months" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | month: 5}}
+        {:shared, datetime: %DateTime{Momento.date! | month: 5}}
       end
 
       it "should replace the MMMM token with the full month name"
@@ -40,7 +40,7 @@ defmodule FormatSpec do
 
     describe "days" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | day: 5}}
+        {:shared, datetime: %DateTime{Momento.date! | day: 5}}
       end
 
       it "should replace the DDDD token with three digit day of year padded with two zeros"
@@ -66,7 +66,7 @@ defmodule FormatSpec do
 
     describe "hours" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | hour: 5}}
+        {:shared, datetime: %DateTime{Momento.date! | hour: 5}}
       end
 
       it "should replace the HH token with two digit hour of day padded with a zero" do
@@ -85,7 +85,7 @@ defmodule FormatSpec do
 
     describe "minutes" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | minute: 5}}
+        {:shared, datetime: %DateTime{Momento.date! | minute: 5}}
       end
 
       it "should replace the mm token with two digit minute of hour padded with a zero" do
@@ -99,7 +99,7 @@ defmodule FormatSpec do
 
     describe "seconds" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | second: 5}}
+        {:shared, datetime: %DateTime{Momento.date! | second: 5}}
       end
 
       it "should replace the mm token with two digit second of minute padded with a zero" do
@@ -113,7 +113,7 @@ defmodule FormatSpec do
 
     describe "fractional seconds" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+        {:shared, datetime: %DateTime{Momento.date! | microsecond: {123456, 6}}}
       end
 
       it "should replace the SSSS-SSSSSSSSS token with "
@@ -162,7 +162,7 @@ defmodule FormatSpec do
 
     describe "unix epoch" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | year: 2016, month: 7, day: 1, hour: 12, minute: 0, second: 5, microsecond: {0, 6}}}
+        {:shared, datetime: %DateTime{Momento.date! | year: 2016, month: 7, day: 1, hour: 12, minute: 0, second: 5, microsecond: {0, 6}}}
       end
 
       it "should replace the X token with unix time in seconds" do

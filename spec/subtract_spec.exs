@@ -6,7 +6,7 @@ defmodule SubtractSpec do
   describe "subtract" do
     describe "years" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | year: 2016}}
+        {:shared, datetime: %DateTime{Momento.date! | year: 2016}}
       end
 
       it "should map singular to plural" do
@@ -33,7 +33,7 @@ defmodule SubtractSpec do
 
     describe "months" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | month: 6}}
+        {:shared, datetime: %DateTime{Momento.date! | month: 6}}
       end
 
       it "should map singular to plural" do
@@ -78,7 +78,7 @@ defmodule SubtractSpec do
 
     describe "days" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | month: 6, day: 15}}
+        {:shared, datetime: %DateTime{Momento.date! | month: 6, day: 15}}
       end
 
       it "should map singular to plural" do
@@ -124,7 +124,7 @@ defmodule SubtractSpec do
 
     describe "hours" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | day: 15, hour: 9}}
+        {:shared, datetime: %DateTime{Momento.date! | day: 15, hour: 9}}
       end
 
       it "should map singular to plural" do
@@ -168,7 +168,7 @@ defmodule SubtractSpec do
 
     describe "minutes" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | hour: 12, minute: 15}}
+        {:shared, datetime: %DateTime{Momento.date! | hour: 12, minute: 15}}
       end
 
       it "should map singular to plural" do
@@ -212,7 +212,7 @@ defmodule SubtractSpec do
 
     describe "seconds" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | minute: 15, second: 15}}
+        {:shared, datetime: %DateTime{Momento.date! | minute: 15, second: 15}}
       end
 
       it "should map singular to plural" do
@@ -256,7 +256,7 @@ defmodule SubtractSpec do
 
     describe "microseconds" do
       before do
-        {:shared, datetime: %DateTime{Momento.date | microsecond: {123456, 6}}}
+        {:shared, datetime: %DateTime{Momento.date! | second: 15, microsecond: {123456, 6}}}
       end
 
       it "should map singular to plural" do

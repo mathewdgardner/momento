@@ -12,17 +12,17 @@ defmodule Momento.Add do
 
   ## Examples
 
-      iex> Momento.date |> Momento.add(5, :years)
+      iex> Momento.date! |> Momento.add(5, :years)
       %DateTime{calendar: Calendar.ISO, day: 1, hour: 22, microsecond: {703979, 6},
        minute: 34, month: 7, second: 50, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2021, zone_abbr: "UTC"}
 
-      ...> Momento.date |> Momento.add(5, :days)
+      ...> Momento.date! |> Momento.add(5, :days)
       %DateTime{calendar: Calendar.ISO, day: 6, hour: 22, microsecond: {904112, 6},
        minute: 37, month: 7, second: 56, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
 
-      ...> Momento.date |> Momento.add(5, :hours) |> Momento.add(15, :minutes)
+      ...> Momento.date! |> Momento.add(5, :hours) |> Momento.add(15, :minutes)
       %DateTime{calendar: Calendar.ISO, day: 2, hour: 3, microsecond: {546990, 6},
        minute: 59, month: 7, second: 26, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
