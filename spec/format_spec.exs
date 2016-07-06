@@ -174,6 +174,16 @@ defmodule FormatSpec do
       end
     end
 
+    describe "unknown" do
+      before do
+        {:shared, datetime: %DateTime{Momento.date! | year: 2016, month: 7, day: 6}}
+      end
+
+      it "should keep unknown tokens" do
+        shared.datetime |> Momento.format("YYYY-MM-DD") |> expect |> to(eql "2016-07-06")
+      end
+    end
+
     describe "localized formats" do
       it "should replace the LLLL token with full month, day of month, day of week, year and 12 hour formatted time"
       it "should replace the LLL token with full month, day of month, year and 12 hour formatted time"
