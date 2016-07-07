@@ -56,7 +56,14 @@ defmodule FormatSpec do
         shared.datetime |> Momento.format("DD") |> expect |> to(eql "05")
       end
 
-      it "should replace the Do token with day of month ordinal"
+      it "should replace the Do token with day of month ordinal" do
+        shared.datetime |> Momento.format("Do") |> expect |> to(eql "5th")
+        %DateTime{Momento.date! | day: 1} |> Momento.format("Do") |> expect |> to(eql "1st")
+        %DateTime{Momento.date! | day: 2} |> Momento.format("Do") |> expect |> to(eql "2nd")
+        %DateTime{Momento.date! | day: 3} |> Momento.format("Do") |> expect |> to(eql "3rd")
+        %DateTime{Momento.date! | day: 12} |> Momento.format("Do") |> expect |> to(eql "12th")
+        %DateTime{Momento.date! | day: 31} |> Momento.format("Do") |> expect |> to(eql "31st")
+      end
 
       it "should replace the D token with day of month without zero padding" do
         shared.datetime |> Momento.format("D") |> expect |> to(eql "5")
