@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|MMMM|MMM|MM?M?M?|Do|DD?D?D?|HH?|mm?|ss?|X|x/
+  @tokens ~r/YYYY|YY?|MM?M?M?|Do|DD?D?D?|HH?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
