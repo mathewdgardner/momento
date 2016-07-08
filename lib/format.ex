@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|MM?M?M?|Do|DD?D?D?|HH?|mm?|ss?|X|x/
+  @tokens ~r/YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -38,10 +38,10 @@ defmodule Momento.Format do
           # TODO: 1970 1971 ... 9999 +10000 +10001
           # "Y" -> datetime.year |> Integer.to_string)
 
-          # TODO: January February ... November December
+          # January February ... November December
           "MMMM" -> datetime.month |> get_month_name
 
-          # TODO: Jan Feb ... Nov Dec
+          # Jan Feb ... Nov Dec
           "MMM" -> datetime.month |> get_month_name(:MMM)
 
           # 01 02 ... 11 12
@@ -50,8 +50,8 @@ defmodule Momento.Format do
           # 1 2 ... 11 12
           "M" -> datetime.month |> Integer.to_string
 
-          # TODO: 1st 2nd ... 11th 12th
-          # "Mo" -> datetime.month |> Integer.to_string
+          # 1st 2nd ... 11th 12th
+          "Mo" -> datetime.month |> get_ordinal_form
 
           # TODO: 001 002 ... 364 365
           # "DDDD" -> datetime.day |> Integer.to_string
@@ -65,7 +65,7 @@ defmodule Momento.Format do
           # 01 02 ... 30 31
           "DD" -> datetime.day |> Integer.to_string |> String.rjust(2, ?0)
 
-          # TODO: 1st 2nd ... 30th 31st
+          # 1st 2nd ... 30th 31st
           "Do" -> datetime.day |> get_ordinal_form
 
           # 1 2 ... 30 31

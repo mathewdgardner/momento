@@ -58,7 +58,20 @@ defmodule FormatSpec do
         shared.datetime |> Momento.format("MM") |> expect |> to(eql "05")
       end
 
-      it "should replace the Mo token with month of year ordinal"
+      it "should replace the Mo token with month of year ordinal" do
+        %DateTime{Momento.date! | month: 1} |> Momento.format("Mo") |> expect |> to(eql "1st")
+        %DateTime{Momento.date! | month: 2} |> Momento.format("Mo") |> expect |> to(eql "2nd")
+        %DateTime{Momento.date! | month: 3} |> Momento.format("Mo") |> expect |> to(eql "3rd")
+        %DateTime{Momento.date! | month: 4} |> Momento.format("Mo") |> expect |> to(eql "4th")
+        %DateTime{Momento.date! | month: 5} |> Momento.format("Mo") |> expect |> to(eql "5th")
+        %DateTime{Momento.date! | month: 6} |> Momento.format("Mo") |> expect |> to(eql "6th")
+        %DateTime{Momento.date! | month: 7} |> Momento.format("Mo") |> expect |> to(eql "7th")
+        %DateTime{Momento.date! | month: 8} |> Momento.format("Mo") |> expect |> to(eql "8th")
+        %DateTime{Momento.date! | month: 9} |> Momento.format("Mo") |> expect |> to(eql "9th")
+        %DateTime{Momento.date! | month: 10} |> Momento.format("Mo") |> expect |> to(eql "10th")
+        %DateTime{Momento.date! | month: 11} |> Momento.format("Mo") |> expect |> to(eql "11th")
+        %DateTime{Momento.date! | month: 12} |> Momento.format("Mo") |> expect |> to(eql "12th")  
+      end
 
       it "should replace the M token with month of year without zero padding" do
         shared.datetime |> Momento.format("M") |> expect |> to(eql "5")
