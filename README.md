@@ -34,31 +34,31 @@ Momento is an Elixir port of [Moment.js](https://github.com/moment/moment) for t
 ### Usage
 
 ```elixir
-> use Momento
-> datetime = Momento.date!
+> import Momento
+> datetime = date!
 %DateTime{calendar: Calendar.ISO, day: 1, hour: 20, microsecond: {904217, 6},
  minute: 44, month: 7, second: 32, std_offset: 0, time_zone: "Etc/UTC",
  utc_offset: 0, year: 2016, zone_abbr: "UTC"}
 
-> Momento.date! |> Momento.add(5, :years)
+> date! |> add(5, :years)
 %DateTime{calendar: Calendar.ISO, day: 1, hour: 20, microsecond: {730106, 6},
  minute: 45, month: 7, second: 57, std_offset: 0, time_zone: "Etc/UTC",
  utc_offset: 0, year: 2021, zone_abbr: "UTC"}
 
-> Momento.date! |> Momento.add(5, :years) |> Momento.add(8, :months)
+> date! |> add(5, :years) |> add(8, :months)
 %DateTime{calendar: Calendar.ISO, day: 1, hour: 20, microsecond: {32939, 6},
  minute: 46, month: 1, second: 24, std_offset: 0, time_zone: "Etc/UTC",
  utc_offset: 0, year: 2022, zone_abbr: "UTC"}
 
-> Momento.date! |> Momento.subtract(1, :days) |> Momento.subtract(3, :hours) |> Momento.add(15, :minutes)
+> date! |> subtract(1, :days) |> subtract(3, :hours) |> add(15, :minutes)
 %DateTime{calendar: Calendar.ISO, day: 0, hour: 18, microsecond: {164079, 6},
  minute: 4, month: 7, second: 13, std_offset: 0, time_zone: "Etc/UTC",
  utc_offset: 0, year: 2016, zone_abbr: "UTC"}
 
-> Momento.date! |> Momento.format("YYYY-MM-DD")
+> date! |> format("YYYY-MM-DD")
 "2016-07-01"
 
-> Momento.date! |> Momento.format("x")
+> date! |> format("x")
 "1467406270"
 ```
 
