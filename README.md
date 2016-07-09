@@ -2,7 +2,7 @@
 
 [![master](https://circleci.com/gh/mathewdgardner/momento.svg?style=shield&circle-token=b7acdd3d8650f741723674973a0776d652f02e14)](https://circleci.com/gh/mathewdgardner/momento)
 [![coverage](https://coveralls.io/repos/github/mathewdgardner/momento/badge.svg?branch=master)](https://coveralls.io/github/mathewdgardner/momento?branch=master)
-[![docs](http://inch-ci.org/github/mathewdgardner/momento.svg)](http://inch-ci.org/github/mathewdgardner/momento)
+[![docs](https://inch-ci.org/github/mathewdgardner/momento.svg)](http://inch-ci.org/github/mathewdgardner/momento)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mathewdgardner/momento/master/LICENSE)
 [![hex](https://img.shields.io/hexpm/v/momento.svg)](https://hex.pm/packages/momento)
 [![gitter](https://badges.gitter.im/mathewdgardner/momento.png)](https://gitter.im/mathewdgardner/momento)
