@@ -36,7 +36,8 @@ defmodule Momento.Mixfile do
     [
       {:espec, "~> 0.8", only: :test},
       {:excoveralls, "~> 0.5", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:inch_ex, only: :docs}
     ]
   end
 
