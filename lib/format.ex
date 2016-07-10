@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|mm?|ss?|X|x/
+  @tokens ~r/YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -92,11 +92,11 @@ defmodule Momento.Format do
           # 0 1 ... 22 23
           "H" -> datetime.hour |> Integer.to_string
 
-          # TODO: 01 02 ... 11 12
-          # "hh" -> datetime.hour |> Integer.to_string
+          # 01 02 ... 11 12
+          "hh" -> datetime.hour |> twelve_hour_format(:hh)
 
-          # TODO: 1 2 ... 11 12
-          # "h" -> datetime.hour |> Integer.to_string
+          # 1 2 ... 11 12
+          "h" -> datetime.hour |> twelve_hour_format
 
           # TODO: 01 02 ... 23 24
           # "kk" -> datetime.hour |> Integer.to_string
@@ -251,4 +251,17 @@ defmodule Momento.Format do
     Integer.to_string(number) <> ordinal_form 
   end
 
+  defp twelve_hour_format(hour, token \\ :h) do
+    adjusted_hour = 
+      cond do
+        hour >= 13 -> hour - 12
+        hour == 0 -> 12
+        true -> hour
+      end
+    adjusted_hour = Integer.to_string(adjusted_hour)  
+    case token do
+      :hh -> adjusted_hour |> String.pad_leading(2, "0")
+      _ -> adjusted_hour
+    end
+  end
 end

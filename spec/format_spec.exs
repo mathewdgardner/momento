@@ -124,8 +124,36 @@ defmodule FormatSpec do
         shared.datetime |> Momento.format("H") |> expect |> to(eql "5")
       end
 
-      it "should replace the hh token with hour of day in 12 hour format padded with a zero"
-      it "should replace the h token with hour of day in 12 hour format without zero padding"
+      it "should replace the hh token with hour of day in 12 hour format padded with a zero" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("hh") |> expect |> to(eql "12")
+        %DateTime{Momento.date! | hour: 1} |> Momento.format("hh") |> expect |> to(eql "01")
+        %DateTime{Momento.date! | hour: 4} |> Momento.format("hh") |> expect |> to(eql "04")
+        %DateTime{Momento.date! | hour: 8} |> Momento.format("hh") |> expect |> to(eql "08")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("hh") |> expect |> to(eql "11")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("hh") |> expect |> to(eql "12")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("hh") |> expect |> to(eql "01")
+        %DateTime{Momento.date! | hour: 14} |> Momento.format("hh") |> expect |> to(eql "02")
+        %DateTime{Momento.date! | hour: 18} |> Momento.format("hh") |> expect |> to(eql "06")
+        %DateTime{Momento.date! | hour: 21} |> Momento.format("hh") |> expect |> to(eql "09")
+        %DateTime{Momento.date! | hour: 23} |> Momento.format("hh") |> expect |> to(eql "11")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("hh") |> expect |> to(eql "12")
+      end
+
+      it "should replace the h token with hour of day in 12 hour format without zero padding" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("h") |> expect |> to(eql "12")
+        %DateTime{Momento.date! | hour: 1} |> Momento.format("h") |> expect |> to(eql "1")
+        %DateTime{Momento.date! | hour: 3} |> Momento.format("h") |> expect |> to(eql "3")
+        %DateTime{Momento.date! | hour: 7} |> Momento.format("h") |> expect |> to(eql "7")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("h") |> expect |> to(eql "11")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("h") |> expect |> to(eql "12")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("h") |> expect |> to(eql "1")
+        %DateTime{Momento.date! | hour: 15} |> Momento.format("h") |> expect |> to(eql "3")
+        %DateTime{Momento.date! | hour: 19} |> Momento.format("h") |> expect |> to(eql "7")
+        %DateTime{Momento.date! | hour: 22} |> Momento.format("h") |> expect |> to(eql "10")
+        %DateTime{Momento.date! | hour: 23} |> Momento.format("h") |> expect |> to(eql "11")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("h") |> expect |> to(eql "12")
+      end
+
       it "should replace the kk token with hour of day in 24 hour format padded with a zero"
       it "should replace the k token with hour of day in 24 hour format without zero padding"
     end
