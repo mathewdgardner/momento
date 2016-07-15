@@ -4,7 +4,7 @@ defmodule Momento.Mixfile do
   def project do
     [
       app: :momento,
-      version: "0.1.1",
+      version: "0.1.2",
       description: description(),
       elixir: "~> 1.3",
       build_embedded: Mix.env == :prod,
