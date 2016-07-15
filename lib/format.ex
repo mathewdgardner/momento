@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -135,10 +135,10 @@ defmodule Momento.Format do
           # "Z" -> datetime.time_zone
 
           # TODO: AM PM
-          # "A" -> datetime.hour |> Integer.to_string
+          "A" -> get_am_pm(datetime.hour)
 
           # TODO: am pm
-          # "a" -> datetime.hour |> Integer.to_string
+          "a" -> get_am_pm(datetime.hour, :a)
 
           # TODO: 1 2 3 4
           # "Q" -> datetime.month |> Integer.to_string
@@ -224,6 +224,14 @@ defmodule Momento.Format do
 
       # Recombine the pieces
       |> Enum.join
+  end
+
+  defp get_am_pm(hour, token \\ :A) do
+    am_pm = if hour >= 12, do: "PM", else: "AM"
+    case token do
+      :a -> String.downcase(am_pm)
+       _ -> am_pm 
+    end
   end
 
   defp get_month_name(month_number, token \\ :MMMM) do

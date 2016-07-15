@@ -203,10 +203,24 @@ defmodule FormatSpec do
     end
 
     describe "am / pm" do
-      it "should replace the A token with AM"
-      it "should replace the A token with PM"
-      it "should replace the a token with am"
-      it "should replace the a token with pm"
+      
+      it "should replace the A token with AM/PM" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 6} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("A") |> expect |> to(eql "PM")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("A") |> expect |> to(eql "PM")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("A") |> expect |> to(eql "PM")
+      end
+
+      it "should replace the a token with am/pm" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 6} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("a") |> expect |> to(eql "pm")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("a") |> expect |> to(eql "pm")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("a") |> expect |> to(eql "pm")
+      end
     end
 
     describe "quarter" do
