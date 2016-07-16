@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|mm?|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -71,20 +71,20 @@ defmodule Momento.Format do
           # 1 2 ... 30 31
           "D" -> datetime.day |> Integer.to_string
 
-          # TODO: Sunday Monday ... Friday Saturday
-          # "dddd" -> datetime.day |> Integer.to_string
+          # Sunday Monday ... Friday Saturday
+          "dddd" -> datetime |> get_day_of_the_week(:dddd)
 
-          # TODO: Sun Mon ... Fri Sat
-          # "ddd" -> datetime.day |> Integer.to_string
+          # Sun Mon ... Fri Sat
+          "ddd" -> datetime |> get_day_of_the_week(:ddd)
 
-          # TODO: Su Mo ... Fr Sa
-          # "dd" -> datetime.day |> Integer.to_string
+          # Su Mo ... Fr Sa
+          "dd" -> datetime |> get_day_of_the_week(:dd)
 
-          # TODO: 0th 1st ... 5th 6th
-          # "do" -> datetime.day |> Integer.to_string
+          # 0th 1st ... 5th 6th
+          "do" -> datetime |> get_day_of_the_week(:do)
 
-          # TODO: 0 1 ... 5 6
-          # "d" -> datetime.day |> Integer.to_string
+          # 0 1 ... 5 6
+          "d" -> datetime |> get_day_of_the_week
 
           # 00 01 ... 22 23
           "HH" -> datetime.hour |> Integer.to_string |> String.rjust(2, ?0)
@@ -134,10 +134,10 @@ defmodule Momento.Format do
           # TODO: -07:00 -06:00 ... +06:00 +07:00
           # "Z" -> datetime.time_zone
 
-          # TODO: AM PM
+          # AM PM
           "A" -> get_am_pm(datetime.hour)
 
-          # TODO: am pm
+          # am pm
           "a" -> get_am_pm(datetime.hour, :a)
 
           # TODO: 1 2 3 4
@@ -226,12 +226,36 @@ defmodule Momento.Format do
       |> Enum.join
   end
 
+  defp calculate_day_of_the_week(datetime) do
+    month_offsets = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4}
+    year = 
+     cond do
+       (datetime.month < 3) -> datetime.year - 1
+       true -> datetime.year  
+     end
+     (year + div(year, 4) - div(year, 100) + div(year, 400) + elem(month_offsets, datetime.month - 1) + datetime.day)
+     |> rem(7)    
+  end
+
   defp get_am_pm(hour, token \\ :A) do
     am_pm = if hour >= 12, do: "PM", else: "AM"
     case token do
       :a -> String.downcase(am_pm)
        _ -> am_pm 
     end
+  end
+
+  defp get_day_of_the_week(datetime, token \\ :d) do
+    days_of_a_week = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+    integer_day_of_the_week = calculate_day_of_the_week(datetime)
+
+     case token do
+      :dddd -> elem(days_of_a_week, integer_day_of_the_week)
+      :ddd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..2)
+      :dd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..1)
+      :do -> get_ordinal_form(integer_day_of_the_week)
+      _  -> integer_day_of_the_week |> Integer.to_string 
+     end
   end
 
   defp get_month_name(month_number, token \\ :MMMM) do
