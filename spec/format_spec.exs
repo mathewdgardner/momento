@@ -279,8 +279,36 @@ defmodule FormatSpec do
     end
 
     describe "quarter" do
-      it "should replace the Q token with quarter of year non-zero indexed"
-      it "should replace the Qo token with quarter of year non-zero indexed ordinal"
+      before do: {:shared, quarter_one_begin: %DateTime{Momento.date! | month: 1}}
+      before do: {:shared, quarter_one_end: %DateTime{Momento.date! | month: 3}}
+      before do: {:shared, quarter_two_begin: %DateTime{Momento.date! | month: 4}}
+      before do: {:shared, quarter_two_end: %DateTime{Momento.date! | month: 6}}
+      before do: {:shared, quarter_three_begin: %DateTime{Momento.date! | month: 7}}
+      before do: {:shared, quarter_three_end: %DateTime{Momento.date! | month: 9}}
+      before do: {:shared, quarter_four_begin: %DateTime{Momento.date! | month: 10}}
+      before do: {:shared, quarter_four_end: %DateTime{Momento.date! | month: 12}}
+
+      it "should replace the Q token with quarter of year non-zero indexed" do
+        shared.quarter_one_begin |> Momento.format("Q") |> expect |> to(eql "1")
+        shared.quarter_one_end |> Momento.format("Q") |> expect |> to(eql "1")
+        shared.quarter_two_begin |> Momento.format("Q") |> expect |> to(eql "2")
+        shared.quarter_two_end |> Momento.format("Q") |> expect |> to(eql "2")
+        shared.quarter_three_begin |> Momento.format("Q") |> expect |> to(eql "3")
+        shared.quarter_three_end |> Momento.format("Q") |> expect |> to(eql "3")
+        shared.quarter_four_begin |> Momento.format("Q") |> expect |> to(eql "4")
+        shared.quarter_four_end |> Momento.format("Q") |> expect |> to(eql "4")
+      end
+
+      it "should replace the Qo token with quarter of year non-zero indexed ordinal" do
+        shared.quarter_one_begin |> Momento.format("Qo") |> expect |> to(eql "1st")
+        shared.quarter_one_end |> Momento.format("Qo") |> expect |> to(eql "1st")
+        shared.quarter_two_begin |> Momento.format("Qo") |> expect |> to(eql "2nd")
+        shared.quarter_two_end |> Momento.format("Qo") |> expect |> to(eql "2nd")
+        shared.quarter_three_begin |> Momento.format("Qo") |> expect |> to(eql "3rd")
+        shared.quarter_three_end |> Momento.format("Qo") |> expect |> to(eql "3rd")
+        shared.quarter_four_begin |> Momento.format("Qo") |> expect |> to(eql "4th")
+        shared.quarter_four_end |> Momento.format("Qo") |> expect |> to(eql "4th")        
+      end
     end
 
     describe "day of week" do

@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|mm?|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|mm?|Qo|Q|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -140,11 +140,11 @@ defmodule Momento.Format do
           # am pm
           "a" -> get_am_pm(datetime.hour, :a)
 
-          # TODO: 1 2 3 4
-          # "Q" -> datetime.month |> Integer.to_string
+          # 1 2 3 4
+          "Q" -> datetime.month |> get_quarter
 
-          # TODO: 1st 2nd 3rd 4th
-          # "Qo" -> datetime.month |> Integer.to_string
+          # 1st 2nd 3rd 4th
+          "Qo" -> datetime.month |> get_quarter(:Qo)
 
           # TODO: 1 2 ... 6 7
           # "E" -> datetime
@@ -281,6 +281,20 @@ defmodule Momento.Format do
           end      
       end
     Integer.to_string(number) <> ordinal_form 
+  end
+
+  defp get_quarter(month, token \\ :Q) do
+    quarter = 
+      cond do
+        month >= 1 && month <= 3  -> 1
+        month >= 4 && month <= 6  -> 2
+        month >= 7 && month <= 9  -> 3
+        month >= 10 && month <= 12  -> 4  
+      end
+    case token do
+      :Qo -> get_ordinal_form(quarter)
+       _ -> Integer.to_string(quarter)  
+    end
   end
 
   defp twelve_hour_format(hour, token \\ :h) do
