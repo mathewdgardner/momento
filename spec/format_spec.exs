@@ -103,12 +103,67 @@ defmodule FormatSpec do
       it "should replace the D token with day of month without zero padding" do
         shared.datetime |> Momento.format("D") |> expect |> to(eql "5")
       end
+    end
 
-      it "should replace the dddd token with day of week full name"
-      it "should replace the ddd token with day of week three letter abbreviation"
-      it "should replace the dd token with day of week two letter abbreviation"
-      it "should replace the do token with day of week ordinal zero indexed"
-      it "should replace the d token with day of week zero indexed"
+    describe "day of the week" do 
+      before do: {:shared, sunday: %DateTime{Momento.date! | day: 29, month: 2, year: 2004}}
+      before do: {:shared, monday: %DateTime{Momento.date! | day: 22, month: 3, year: 1993}}
+      before do: {:shared, tuesday: %DateTime{Momento.date! | day: 5,  month: 12, year: 2023}}
+      before do: {:shared, wednesday: %DateTime{Momento.date! | day: 20, month: 8, year: 2003}}
+      before do: {:shared, thursday: %DateTime{Momento.date! | day: 25, month: 1, year: 1996}}
+      before do: {:shared, friday: %DateTime{Momento.date! | day: 22, month: 4, year: 2016}}
+      before do: {:shared, saturday: %DateTime{Momento.date! | day: 9, month: 6, year: 2007}}
+
+      it "should replace the dddd token with day of week full name" do
+        shared.sunday |> Momento.format("dddd") |> expect |> to(eql "Sunday")
+        shared.monday |> Momento.format("dddd") |> expect |> to(eql "Monday")
+        shared.tuesday |> Momento.format("dddd") |> expect |> to(eql "Tuesday")
+        shared.wednesday |> Momento.format("dddd") |> expect |> to(eql "Wednesday")
+        shared.thursday |> Momento.format("dddd") |> expect |> to(eql "Thursday")
+        shared.friday |> Momento.format("dddd") |> expect |> to(eql "Friday")
+        shared.saturday |> Momento.format("dddd") |> expect |> to(eql "Saturday")         
+      end
+
+      it "should replace the ddd token with day of week three letter abbreviation" do
+        shared.sunday |> Momento.format("ddd") |> expect |> to(eql "Sun")
+        shared.monday |> Momento.format("ddd") |> expect |> to(eql "Mon")
+        shared.tuesday |> Momento.format("ddd") |> expect |> to(eql "Tue")
+        shared.wednesday |> Momento.format("ddd") |> expect |> to(eql "Wed")
+        shared.thursday |> Momento.format("ddd") |> expect |> to(eql "Thu")
+        shared.friday |> Momento.format("ddd") |> expect |> to(eql "Fri")
+        shared.saturday |> Momento.format("ddd") |> expect |> to(eql "Sat")         
+      end
+
+
+      it "should replace the dd token with day of week two letter abbreviation" do
+        shared.sunday |> Momento.format("dd") |> expect |> to(eql "Su")
+        shared.monday |> Momento.format("dd") |> expect |> to(eql "Mo")
+        shared.tuesday |> Momento.format("dd") |> expect |> to(eql "Tu")
+        shared.wednesday |> Momento.format("dd") |> expect |> to(eql "We")
+        shared.thursday |> Momento.format("dd") |> expect |> to(eql "Th")
+        shared.friday |> Momento.format("dd") |> expect |> to(eql "Fr")
+        shared.saturday |> Momento.format("dd") |> expect |> to(eql "Sa")        
+      end
+
+      it "should replace the do token with day of week ordinal zero indexed in ordinal form" do
+        shared.sunday |> Momento.format("do") |> expect |> to(eql "0th")
+        shared.monday |> Momento.format("do") |> expect |> to(eql "1st")
+        shared.tuesday |> Momento.format("do") |> expect |> to(eql "2nd")
+        shared.wednesday |> Momento.format("do") |> expect |> to(eql "3rd")
+        shared.thursday |> Momento.format("do") |> expect |> to(eql "4th")
+        shared.friday |> Momento.format("do") |> expect |> to(eql "5th")
+        shared.saturday |> Momento.format("do") |> expect |> to(eql "6th")
+      end
+
+      it "should replace the d token with day of week zero indexed" do
+        shared.sunday |> Momento.format("d") |> expect |> to(eql "0")
+        shared.monday |> Momento.format("d") |> expect |> to(eql "1")
+        shared.tuesday |> Momento.format("d") |> expect |> to(eql "2")
+        shared.wednesday |> Momento.format("d") |> expect |> to(eql "3")
+        shared.thursday |> Momento.format("d") |> expect |> to(eql "4")
+        shared.friday |> Momento.format("d") |> expect |> to(eql "5")
+        shared.saturday |> Momento.format("d") |> expect |> to(eql "6")
+      end
     end
 
     describe "hours" do
@@ -203,15 +258,57 @@ defmodule FormatSpec do
     end
 
     describe "am / pm" do
-      it "should replace the A token with AM"
-      it "should replace the A token with PM"
-      it "should replace the a token with am"
-      it "should replace the a token with pm"
+      
+      it "should replace the A token with AM/PM" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 6} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("A") |> expect |> to(eql "AM")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("A") |> expect |> to(eql "PM")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("A") |> expect |> to(eql "PM")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("A") |> expect |> to(eql "PM")
+      end
+
+      it "should replace the a token with am/pm" do
+        %DateTime{Momento.date! | hour: 0} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 6} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 11} |> Momento.format("a") |> expect |> to(eql "am")
+        %DateTime{Momento.date! | hour: 12} |> Momento.format("a") |> expect |> to(eql "pm")
+        %DateTime{Momento.date! | hour: 13} |> Momento.format("a") |> expect |> to(eql "pm")
+        %DateTime{Momento.date! | hour: 24} |> Momento.format("a") |> expect |> to(eql "pm")
+      end
     end
 
     describe "quarter" do
-      it "should replace the Q token with quarter of year non-zero indexed"
-      it "should replace the Qo token with quarter of year non-zero indexed ordinal"
+      before do: {:shared, quarter_one_begin: %DateTime{Momento.date! | month: 1}}
+      before do: {:shared, quarter_one_end: %DateTime{Momento.date! | month: 3}}
+      before do: {:shared, quarter_two_begin: %DateTime{Momento.date! | month: 4}}
+      before do: {:shared, quarter_two_end: %DateTime{Momento.date! | month: 6}}
+      before do: {:shared, quarter_three_begin: %DateTime{Momento.date! | month: 7}}
+      before do: {:shared, quarter_three_end: %DateTime{Momento.date! | month: 9}}
+      before do: {:shared, quarter_four_begin: %DateTime{Momento.date! | month: 10}}
+      before do: {:shared, quarter_four_end: %DateTime{Momento.date! | month: 12}}
+
+      it "should replace the Q token with quarter of year non-zero indexed" do
+        shared.quarter_one_begin |> Momento.format("Q") |> expect |> to(eql "1")
+        shared.quarter_one_end |> Momento.format("Q") |> expect |> to(eql "1")
+        shared.quarter_two_begin |> Momento.format("Q") |> expect |> to(eql "2")
+        shared.quarter_two_end |> Momento.format("Q") |> expect |> to(eql "2")
+        shared.quarter_three_begin |> Momento.format("Q") |> expect |> to(eql "3")
+        shared.quarter_three_end |> Momento.format("Q") |> expect |> to(eql "3")
+        shared.quarter_four_begin |> Momento.format("Q") |> expect |> to(eql "4")
+        shared.quarter_four_end |> Momento.format("Q") |> expect |> to(eql "4")
+      end
+
+      it "should replace the Qo token with quarter of year non-zero indexed ordinal" do
+        shared.quarter_one_begin |> Momento.format("Qo") |> expect |> to(eql "1st")
+        shared.quarter_one_end |> Momento.format("Qo") |> expect |> to(eql "1st")
+        shared.quarter_two_begin |> Momento.format("Qo") |> expect |> to(eql "2nd")
+        shared.quarter_two_end |> Momento.format("Qo") |> expect |> to(eql "2nd")
+        shared.quarter_three_begin |> Momento.format("Qo") |> expect |> to(eql "3rd")
+        shared.quarter_three_end |> Momento.format("Qo") |> expect |> to(eql "3rd")
+        shared.quarter_four_begin |> Momento.format("Qo") |> expect |> to(eql "4th")
+        shared.quarter_four_end |> Momento.format("Qo") |> expect |> to(eql "4th")        
+      end
     end
 
     describe "day of week" do

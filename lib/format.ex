@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/YYYY|YY?|Mo|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|mm?|Qo|Q|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -71,20 +71,20 @@ defmodule Momento.Format do
           # 1 2 ... 30 31
           "D" -> datetime.day |> Integer.to_string
 
-          # TODO: Sunday Monday ... Friday Saturday
-          # "dddd" -> datetime.day |> Integer.to_string
+          # Sunday Monday ... Friday Saturday
+          "dddd" -> datetime |> get_day_of_the_week(:dddd)
 
-          # TODO: Sun Mon ... Fri Sat
-          # "ddd" -> datetime.day |> Integer.to_string
+          # Sun Mon ... Fri Sat
+          "ddd" -> datetime |> get_day_of_the_week(:ddd)
 
-          # TODO: Su Mo ... Fr Sa
-          # "dd" -> datetime.day |> Integer.to_string
+          # Su Mo ... Fr Sa
+          "dd" -> datetime |> get_day_of_the_week(:dd)
 
-          # TODO: 0th 1st ... 5th 6th
-          # "do" -> datetime.day |> Integer.to_string
+          # 0th 1st ... 5th 6th
+          "do" -> datetime |> get_day_of_the_week(:do)
 
-          # TODO: 0 1 ... 5 6
-          # "d" -> datetime.day |> Integer.to_string
+          # 0 1 ... 5 6
+          "d" -> datetime |> get_day_of_the_week
 
           # 00 01 ... 22 23
           "HH" -> datetime.hour |> Integer.to_string |> String.rjust(2, ?0)
@@ -134,17 +134,17 @@ defmodule Momento.Format do
           # TODO: -07:00 -06:00 ... +06:00 +07:00
           # "Z" -> datetime.time_zone
 
-          # TODO: AM PM
-          # "A" -> datetime.hour |> Integer.to_string
+          # AM PM
+          "A" -> get_am_pm(datetime.hour)
 
-          # TODO: am pm
-          # "a" -> datetime.hour |> Integer.to_string
+          # am pm
+          "a" -> get_am_pm(datetime.hour, :a)
 
-          # TODO: 1 2 3 4
-          # "Q" -> datetime.month |> Integer.to_string
+          # 1 2 3 4
+          "Q" -> datetime.month |> get_quarter
 
-          # TODO: 1st 2nd 3rd 4th
-          # "Qo" -> datetime.month |> Integer.to_string
+          # 1st 2nd 3rd 4th
+          "Qo" -> datetime.month |> get_quarter(:Qo)
 
           # TODO: 1 2 ... 6 7
           # "E" -> datetime
@@ -226,6 +226,38 @@ defmodule Momento.Format do
       |> Enum.join
   end
 
+  defp calculate_day_of_the_week(datetime) do
+    month_offsets = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4}
+    year = 
+     cond do
+       (datetime.month < 3) -> datetime.year - 1
+       true -> datetime.year  
+     end
+     (year + div(year, 4) - div(year, 100) + div(year, 400) + elem(month_offsets, datetime.month - 1) + datetime.day)
+     |> rem(7)    
+  end
+
+  defp get_am_pm(hour, token \\ :A) do
+    am_pm = if hour >= 12, do: "PM", else: "AM"
+    case token do
+      :a -> String.downcase(am_pm)
+       _ -> am_pm 
+    end
+  end
+
+  defp get_day_of_the_week(datetime, token \\ :d) do
+    days_of_a_week = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+    integer_day_of_the_week = calculate_day_of_the_week(datetime)
+
+     case token do
+      :dddd -> elem(days_of_a_week, integer_day_of_the_week)
+      :ddd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..2)
+      :dd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..1)
+      :do -> get_ordinal_form(integer_day_of_the_week)
+      _  -> integer_day_of_the_week |> Integer.to_string 
+     end
+  end
+
   defp get_month_name(month_number, token \\ :MMMM) do
     month_name = elem({"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}, month_number-1)
     case token do
@@ -249,6 +281,20 @@ defmodule Momento.Format do
           end      
       end
     Integer.to_string(number) <> ordinal_form 
+  end
+
+  defp get_quarter(month, token \\ :Q) do
+    quarter = 
+      cond do
+        month >= 1 && month <= 3  -> 1
+        month >= 4 && month <= 6  -> 2
+        month >= 7 && month <= 9  -> 3
+        month >= 10 && month <= 12  -> 4  
+      end
+    case token do
+      :Qo -> get_ordinal_form(quarter)
+       _ -> Integer.to_string(quarter)  
+    end
   end
 
   defp twelve_hour_format(hour, token \\ :h) do
