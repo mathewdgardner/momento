@@ -357,16 +357,95 @@ defmodule FormatSpec do
     end
 
     describe "localized formats" do
-      it "should replace the LLLL token with full month, day of month, day of week, year and 12 hour formatted time"
-      it "should replace the LLL token with full month, day of month, year and 12 hour formatted time"
-      it "should replace the LL token with full month, day of month and year"
-      it "should replace the LTS token with 12 hour formatted time with seconds"
-      it "should replace the LT token with 12 hour formatted time"
-      it "should replace the L token with month numeral, day of month, year"
-      it "should replace the llll token with abbreviated month, day of month, day of week, year and 12 hour formatted time"
-      it "should replace the lll token with abbreviated month, day of month, year and 12 hour formatted time"
-      it "should replace the ll token with abbreviated month, day of month and year"
-      it "should replace the l token with abbreviated numeral, day of month, year"
+      #Thursday May 29, 1997
+      before do: {:shared, day_one: %DateTime{Momento.date! | day: 29, month: 5, year: 1997, hour: 15, minute: 22, second: 34}}
+      #Friday April 1 2011
+      before do: {:shared, day_two: %DateTime{Momento.date! | day: 1, month: 4, year: 2011, hour: 12, minute: 0, second: 1}}
+      #Sunday Feb 29 2004
+      before do: {:shared, day_three: %DateTime{Momento.date! | day: 29, month: 2, year: 2004, hour: 6, minute: 12, second: 59}}
+      #Monday July 25 2016
+      before do: {:shared, day_four: %DateTime{Momento.date! | day: 25, month: 7, year: 2016, hour: 23, minute: 45, second: 45}}
+      #Wednesday Nov 22 2028
+      before do: {:shared, day_five: %DateTime{Momento.date! | day: 22, month: 11, year: 2028, hour: 3, minute: 51, second: 21}}
+
+      it "should replace the LLLL token with day of week, full month, day of month, year and 12 hour formatted time" do
+        shared.day_one |> Momento.format("LLLL") |> expect |> to(eql "Thursday, May 29 1997 3:22 PM")
+        shared.day_two |> Momento.format("LLLL") |> expect |> to(eql "Friday, April 1 2011 12:00 PM")
+        shared.day_three |> Momento.format("LLLL") |> expect |> to(eql "Sunday, February 29 2004 6:12 AM")
+        shared.day_four |> Momento.format("LLLL") |> expect |> to(eql "Monday, July 25 2016 11:45 PM")
+        shared.day_five |> Momento.format("LLLL") |> expect |> to(eql "Wednesday, November 22 2028 3:51 AM")
+      end
+
+      it "should replace the LLL token with Month name, day of month, year, 12 hour formatted time" do
+        shared.day_one |> Momento.format("LLL") |> expect |> to(eql "May 29 1997 3:22 PM")
+        shared.day_two |> Momento.format("LLL") |> expect |> to(eql "April 1 2011 12:00 PM")
+        shared.day_three |> Momento.format("LLL") |> expect |> to(eql "February 29 2004 6:12 AM")
+        shared.day_four |> Momento.format("LLL") |> expect |> to(eql "July 25 2016 11:45 PM")
+        shared.day_five |> Momento.format("LLL") |> expect |> to(eql "November 22 2028 3:51 AM")
+      end
+
+      it "should replace the LL token with full month, day of month and year" do
+        shared.day_one |> Momento.format("LL") |> expect |> to(eql "May 29 1997")
+        shared.day_two |> Momento.format("LL") |> expect |> to(eql "April 1 2011")
+        shared.day_three |> Momento.format("LL") |> expect |> to(eql "February 29 2004")
+        shared.day_four |> Momento.format("LL") |> expect |> to(eql "July 25 2016")
+        shared.day_five |> Momento.format("LL") |> expect |> to(eql "November 22 2028")
+      end
+
+      it "should replace the LTS token with 12 hour formatted time with seconds" do
+        shared.day_one |> Momento.format("LTS") |> expect |> to(eql "3:22:34 PM")
+        shared.day_two |> Momento.format("LTS") |> expect |> to(eql "12:00:01 PM")
+        shared.day_three |> Momento.format("LTS") |> expect |> to(eql "6:12:59 AM")
+        shared.day_four |> Momento.format("LTS") |> expect |> to(eql "11:45:45 PM")
+        shared.day_five |> Momento.format("LTS") |> expect |> to(eql "3:51:21 AM")        
+      end
+
+      it "should replace the LT token with 12 hour formatted time" do
+        shared.day_one |> Momento.format("LT") |> expect |> to(eql "3:22 PM")
+        shared.day_two |> Momento.format("LT") |> expect |> to(eql "12:00 PM")
+        shared.day_three |> Momento.format("LT") |> expect |> to(eql "6:12 AM")
+        shared.day_four |> Momento.format("LT") |> expect |> to(eql "11:45 PM")
+        shared.day_five |> Momento.format("LT") |> expect |> to(eql "3:51 AM")        
+      end
+
+      it "should replace the L token with month numeral, day of month, year" do
+        shared.day_one |> Momento.format("L") |> expect |> to(eql "05/29/1997")
+        shared.day_two |> Momento.format("L") |> expect |> to(eql "04/01/2011")
+        shared.day_three |> Momento.format("L") |> expect |> to(eql "02/29/2004")
+        shared.day_four |> Momento.format("L") |> expect |> to(eql "07/25/2016")
+        shared.day_five |> Momento.format("L") |> expect |> to(eql "11/22/2028")
+      end
+
+      it "should replace the llll token with day of week abbreviated, day of month abbreviated, year and 12 hour formatted time" do
+        shared.day_one |> Momento.format("llll") |> expect |> to(eql "Thu, May 29 1997 3:22 PM")
+        shared.day_two |> Momento.format("llll") |> expect |> to(eql "Fri, Apr 1 2011 12:00 PM")
+        shared.day_three |> Momento.format("llll") |> expect |> to(eql "Sun, Feb 29 2004 6:12 AM")
+        shared.day_four |> Momento.format("llll") |> expect |> to(eql "Mon, Jul 25 2016 11:45 PM")
+        shared.day_five |> Momento.format("llll") |> expect |> to(eql "Wed, Nov 22 2028 3:51 AM")
+      end
+
+      it "should replace the lll token with abbreviated month, day of month, year and 12 hour formatted time" do
+        shared.day_one |> Momento.format("lll") |> expect |> to(eql "May 29 1997 3:22 PM")
+        shared.day_two |> Momento.format("lll") |> expect |> to(eql "Apr 1 2011 12:00 PM")
+        shared.day_three |> Momento.format("lll") |> expect |> to(eql "Feb 29 2004 6:12 AM")
+        shared.day_four |> Momento.format("lll") |> expect |> to(eql "Jul 25 2016 11:45 PM")
+        shared.day_five |> Momento.format("lll") |> expect |> to(eql "Nov 22 2028 3:51 AM")        
+      end
+
+      it "should replace the ll token with abbreviated month, day of month and year" do
+        shared.day_one |> Momento.format("ll") |> expect |> to(eql "May 29 1997")
+        shared.day_two |> Momento.format("ll") |> expect |> to(eql "Apr 1 2011")
+        shared.day_three |> Momento.format("ll") |> expect |> to(eql "Feb 29 2004")
+        shared.day_four |> Momento.format("ll") |> expect |> to(eql "Jul 25 2016")
+        shared.day_five |> Momento.format("ll") |> expect |> to(eql "Nov 22 2028")           
+      end
+      it "should replace the l token with abbreviated numeral, day of month, year" do
+        shared.day_one |> Momento.format("l") |> expect |> to(eql "5/29/1997")
+        shared.day_two |> Momento.format("l") |> expect |> to(eql "4/1/2011")
+        shared.day_three |> Momento.format("l") |> expect |> to(eql "2/29/2004")
+        shared.day_four |> Momento.format("l") |> expect |> to(eql "7/25/2016")
+        shared.day_five |> Momento.format("l") |> expect |> to(eql "11/22/2028")            
+      end
     end
   end
 end

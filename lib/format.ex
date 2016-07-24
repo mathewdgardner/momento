@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|mm?|Qo|Q|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|LTS?|LL?L?L?|ll?l?l?|mm?|Qo|Q|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -182,35 +182,35 @@ defmodule Momento.Format do
           # TODO: 70 71 ... 29 30
           # "gg" -> datetime
 
-          # TODO: Thursday, September 4 1986 8:30 PM
-          # "LLLL" -> datetime
+          # Thursday, September 4 1986 8:30 PM
+          "LLLL" -> Momento.format(datetime, "dddd, MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
 
-          # TODO: September 4 1986 8:30 PM
-          # "LLL" -> datetime
+          # September 4 1986 8:30 PM
+          "LLL" -> Momento.format(datetime, "MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
 
-          # TODO: September 4 1986
-          # "LL" -> datetime
+          # September 4 1986
+          "LL" -> Momento.format(datetime, "MMMM D YYYY")
 
-          # TODO: 8:30:25 PM
-          # "LTS" -> datetime
+          # 8:30:25 PM
+          "LTS" -> Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)}:#{pad_leading_zero(datetime.second)} A")
 
-          # TODO: 8:30 PM
-          # "LT" -> datetime
+          # 8:30 PM
+          "LT" -> Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)} A")
 
-          # TODO: 09/04/1986
-          # "L" -> datetime
+          # 09/04/1986
+          "L" -> Momento.format(datetime, "MM/DD/YYYY")
 
-          # TODO: Thu, Sep 4 1986 8:30 PM
-          # "llll" -> datetime
+          # Thu, Sep 4 1986 8:30 PM
+          "llll" -> Momento.format(datetime, "ddd, MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
 
-          # TODO: Sep 4 1986 8:30 PM
-          # "lll" -> datetime
+          # Sep 4 1986 8:30 PM
+          "lll" -> Momento.format(datetime, "MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
 
-          # TODO: Sep 4 1986
-          # "ll" -> datetime
+          # Sep 4 1986
+          "ll" -> Momento.format(datetime, "MMM D YYYY")
 
-          # TODO: 9/4/1986
-          # "l" -> datetime
+          # 9/4/1986
+          "l" -> Momento.format(datetime, "M/D/YYYY")
 
           # 1360013296
           "X" -> datetime |> DateTime.to_unix |> Integer.to_string
@@ -309,5 +309,9 @@ defmodule Momento.Format do
       :hh -> adjusted_hour |> String.pad_leading(2, "0")
       _ -> adjusted_hour
     end
+  end
+
+  defp pad_leading_zero(number) do
+    number |> Integer.to_string |> String.pad_leading(2, "0")
   end
 end
