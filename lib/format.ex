@@ -15,7 +15,7 @@ defmodule Momento.Format do
       "7-1-16"
   """
 
-  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|LL?L?L?|ll?l?l?|mm?|Qo|Q|ss?|X|x/
+  @tokens ~r/A|a|YYYY|YY?|Mo|MM?M?M?|Do|do|DD?D?D?|dd?d?d?|HH?|hh?|LTS?|LL?L?L?|ll?l?l?|mm?|Qo|Q|ss?|X|x/
 
   @spec format(DateTime.t, String.t) :: String.t
   # An implementation of the Moment.js formats listed here: http://momentjs.com/docs/#/displaying/format/
@@ -191,11 +191,11 @@ defmodule Momento.Format do
           # September 4 1986
           "LL" -> Momento.format(datetime, "MMMM D YYYY")
 
-          # TODO: 8:30:25 PM
-          # "LTS" -> datetime
+          # 8:30:25 PM
+          "LTS" -> Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)}:#{pad_leading_zero(datetime.second)} A")
 
-          # TODO: 8:30 PM
-          # "LT" -> datetime
+          # 8:30 PM
+          "LT" -> Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)} A")
 
           # 09/04/1986
           "L" -> Momento.format(datetime, "MM/DD/YYYY")
